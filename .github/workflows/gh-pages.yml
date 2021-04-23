@@ -21,4 +21,4 @@ jobs:
       
       - uses: proulxsamuel/deploy-blazor-to-gh-pages@master
         with:
-          project_path: './BasicBlazorWebAssemblyPwaGithubPagesApp/'
+          project_path: './JumpDieMeileWebApp/'
