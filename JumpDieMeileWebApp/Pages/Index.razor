@@ -1,3 +1,112 @@
 ﻿@page "/"
+@using System.Text
+@using System.Threading
+@using MQTTnet
+@using MQTTnet.Client
+@using MQTTnet.Client.Options
+@inject HttpClient httpClient
 
 <h1>Under Construction...</h1>
+
+<button @onclick="this.Test">Test_Get</button>
+<button @onclick="this.Test2">Test_Post</button>
+
+<textarea @bind=this.InputText @bind:event="oninput"></textarea>
+<p></p>
+<p>Content of textarea:</p>
+<p>@this.InputText</p>
+
+
+<p>Last answer:</p>
+<p>@this.LastResponse</p>
+
+@code
+{
+    [Parameter]
+    public string InputText { get; set; } = string.Empty;
+
+    [Parameter]
+    public string LastResponse { get; set; } = string.Empty;
+
+    public async void Test()
+    {
+        Console.WriteLine("Starting test");
+        try
+        {
+            using (var client = new HttpClient())
+            {
+                var request = new HttpRequestMessage() {
+                    RequestUri = new Uri("https://impulse-online.de/_test/test.php"),
+                    Method = HttpMethod.Get,
+                };
+                request.SetBrowserRequestMode(BrowserRequestMode.Cors);
+                var result = await client.SendAsync(request);
+                var response = await result.Content.ReadAsStringAsync();
+                Console.WriteLine($"length: {response.Length}");
+                Console.WriteLine(response);
+                this.LastResponse = response;
+                this.StateHasChanged();
+                return;
+            }
+
+            var factory = new MqttFactory();
+            var mqttClient = factory.CreateMqttClient();
+
+    // Use WebSocket connection.
+            var options = new MqttClientOptionsBuilder()
+                .WithWebSocketServer("wss://broker.emqx.io:8084/mqtt")
+    //.WithCredentials("guest", "guest")
+                .Build();
+
+            await mqttClient.ConnectAsync(options, CancellationToken.None); // Since 3.0.5 with CancellationToken
+
+            MqttClientExtensions.UseApplicationMessageReceivedHandler(
+                mqttClient,
+                eventArgs =>
+                {
+                    Console.WriteLine(Encoding.UTF8.GetString(eventArgs.ApplicationMessage.Payload));
+                });
+
+            await mqttClient.SubscribeAsync("MySuperTopic");
+
+            while (true)
+            {
+                await mqttClient.PublishAsync("MySuperTopic", Encoding.UTF8.GetBytes("I rly hope that works"));
+                Console.WriteLine("published message");
+                await Task.Delay(2000);
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+    }
+
+    public async void Test2()
+    {
+        Console.WriteLine("Starting test");
+        try
+        {
+            using (var client = new HttpClient())
+            {
+                var request = new HttpRequestMessage() {
+                    RequestUri = new Uri("https://impulse-online.de/_test/testpost.php"),
+                    Method = HttpMethod.Post,
+                };
+                request.SetBrowserRequestMode(BrowserRequestMode.Cors);
+                request.Content = new StringContent(this.InputText);
+                var result = await client.SendAsync(request);
+                var response = await result.Content.ReadAsStringAsync();
+                Console.WriteLine($"length: {response.Length}");
+                Console.WriteLine(response);
+                this.LastResponse = response;
+                this.StateHasChanged();
+                return;
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+    }
+}

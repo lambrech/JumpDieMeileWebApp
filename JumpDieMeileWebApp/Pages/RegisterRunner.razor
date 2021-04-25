@@ -1,0 +1,46 @@
+﻿@page "/register-runner"
+
+<style>
+    .display-none {
+        display: none;
+    }
+</style>
+
+<h3>Neuen Läufer anmelden</h3>
+
+<div class="@(this.RegistrationDone ? "display-none" : "")">
+<EditForm Model="@this.NewRunner" OnValidSubmit="@this.HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    
+    <InputText id="firstname" @bind-Value="this.NewRunner.FirstName" />
+    <InputText id="lastname" @bind-Value="this.NewRunner.LastName" />
+    <InputText id="username" @bind-Value="this.NewRunner.Username" @onchange="this.ReloadAndValidateUserName" @oninput="() => this.StateHasChanged()"   />
+    <p class="@(this.IsCurrentUserNameValid ? "display-none" : "")">Der angegeben Nutzername ist leider bereits vergeben. Bitte wähle einen anderen.</p>
+    <InputText id="email" @bind-Value="this.NewRunner.Email" />
+
+    <button type="submit">Submit</button>
+</EditForm>
+</div>
+
+<div class="@(!this.RegistrationDone ? "display-none" : "")">
+    Danke für deine Anmeldung. Viel Spaß beim Laufen.???
+    <p>
+        @this.RegisteredRunner?.Id
+    </p>
+    <p>
+        @this.RegisteredRunner?.FirstName
+    </p>
+    <p>
+        @this.RegisteredRunner?.LastName
+    </p>
+    <p>
+        @this.RegisteredRunner?.Email
+    </p>
+    <p>
+        @this.RegisteredRunner?.Username
+    </p>
+    <p>
+        @this.RegisteredRunner?.FullDisplayName
+    </p>
+</div>
