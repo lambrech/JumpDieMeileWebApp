@@ -36,7 +36,7 @@
             using (var client = new HttpClient())
             {
                 var request = new HttpRequestMessage() {
-                    RequestUri = new Uri("https://impulse-online.de/_test/test.php"),
+                    RequestUri = new Uri("https://impulse-online.de/jdm_wa_db_relay/test.php"),
                     Method = HttpMethod.Get,
                 };
                 request.SetBrowserRequestMode(BrowserRequestMode.Cors);
@@ -90,11 +90,19 @@
             using (var client = new HttpClient())
             {
                 var request = new HttpRequestMessage() {
-                    RequestUri = new Uri("https://impulse-online.de/_test/testpost.php"),
+                    RequestUri = new Uri("https://impulse-online.de/jdm_wa_db_relay/handle_post.php"),
                     Method = HttpMethod.Post,
                 };
                 request.SetBrowserRequestMode(BrowserRequestMode.Cors);
                 request.Content = new StringContent(this.InputText);
+
+                var protocolVersionBytes = BitConverter.GetBytes((int)1);
+                var payloadBytes = Encoding.UTF8.GetBytes(this.InputText);
+                var payloadLength = BitConverter.GetBytes(payloadBytes.Length);
+
+                var finalPayload = protocolVersionBytes.Concat(payloadLength).Concat(payloadBytes).ToArray();
+
+                request.Content = new ByteArrayContent(finalPayload);
                 var result = await client.SendAsync(request);
                 var response = await result.Content.ReadAsStringAsync();
                 Console.WriteLine($"length: {response.Length}");
