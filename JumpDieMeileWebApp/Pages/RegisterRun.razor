@@ -1,3 +1,48 @@
 ﻿@page "/register-run"
 
+<style>
+    .display-none {
+        display: none;
+    }
+</style>
+
 <h3>Neuen Lauf eintragen</h3>
+
+<div class="@(this.RunRegistered ? "display-none" : "")">
+    <EditForm EditContext="@this.CurrentEditContext" OnValidSubmit="@this.HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+    
+        <InputSelect id="selectedRunner" @bind-Value="this.SelectedRunner">
+            @foreach (var runner in this.allPersistedRunners)
+            {
+                <option value="@runner">@runner.FullDisplayName</option>
+            }
+        </InputSelect>
+        <InputNumber id="run_distance" @bind-Value="this.Distance" />
+        <InputDate id="run_startdate" @bind-Value="this.StartTimeLocalDate"></InputDate>
+        <InputText id="run_starttime" @bind-Value="this.StartTimeLocalTime"></InputText>
+        <InputText id="run_duration" @bind-Value="this.Duration"></InputText>
+
+        <button type="submit">Submit</button>
+    </EditForm>
+</div>
+
+<div class="@(!this.RunRegistered ? "display-none" : "")">
+    Danke für deinen Eintrag.
+    <p>
+        @this.RegisteredRun?.Id
+    </p>
+    <p>
+        @this.RegisteredRun?.DistanceKm
+    </p>
+    <p>
+        @this.RegisteredRun?.StartTimestampUtc.ToLocalTime()
+    </p>
+    <p>
+        @this.RegisteredRun?.Duration
+    </p>
+    <p>
+        @this.RegisteredRun?.AverageSpeedKmh
+    </p>
+</div>

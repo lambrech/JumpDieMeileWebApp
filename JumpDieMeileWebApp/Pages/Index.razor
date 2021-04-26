@@ -1,9 +1,6 @@
 ﻿@page "/"
 @using System.Text
 @using System.Threading
-@using MQTTnet
-@using MQTTnet.Client
-@using MQTTnet.Client.Options
 @inject HttpClient httpClient
 
 <h1>Under Construction...</h1>
@@ -46,34 +43,6 @@
                 Console.WriteLine(response);
                 this.LastResponse = response;
                 this.StateHasChanged();
-                return;
-            }
-
-            var factory = new MqttFactory();
-            var mqttClient = factory.CreateMqttClient();
-
-    // Use WebSocket connection.
-            var options = new MqttClientOptionsBuilder()
-                .WithWebSocketServer("wss://broker.emqx.io:8084/mqtt")
-    //.WithCredentials("guest", "guest")
-                .Build();
-
-            await mqttClient.ConnectAsync(options, CancellationToken.None); // Since 3.0.5 with CancellationToken
-
-            MqttClientExtensions.UseApplicationMessageReceivedHandler(
-                mqttClient,
-                eventArgs =>
-                {
-                    Console.WriteLine(Encoding.UTF8.GetString(eventArgs.ApplicationMessage.Payload));
-                });
-
-            await mqttClient.SubscribeAsync("MySuperTopic");
-
-            while (true)
-            {
-                await mqttClient.PublishAsync("MySuperTopic", Encoding.UTF8.GetBytes("I rly hope that works"));
-                Console.WriteLine("published message");
-                await Task.Delay(2000);
             }
         }
         catch (Exception e)
@@ -109,7 +78,6 @@
                 Console.WriteLine(response);
                 this.LastResponse = response;
                 this.StateHasChanged();
-                return;
             }
         }
         catch (Exception e)

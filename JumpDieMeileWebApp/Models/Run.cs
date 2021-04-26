@@ -4,17 +4,22 @@
 
     public class Run : ModelBase
     {
-        public Run(Runner runner)
+        public Run(Runner runner, decimal distanceKm, DateTime startTimestampUtc, TimeSpan? duration)
         {
             this.Runner = runner;
+            this.DistanceKm = distanceKm;
+            this.StartTimestampUtc = startTimestampUtc;
+            this.Duration = duration;
         }
 
-        public Runner Runner { get; set; }
+        public Runner Runner { get; }
 
-        public decimal DistanceKm { get; set; }
+        public decimal DistanceKm { get; }
 
-        public DateTime StartTimestampUtc { get; set; }
+        public DateTime StartTimestampUtc { get; }
 
-        public TimeSpan? Duration { get; set; }
+        public TimeSpan? Duration { get; }
+
+        public decimal? AverageSpeedKmh => this.Duration.HasValue ? this.DistanceKm / (decimal)this.Duration.Value.TotalHours : null;
     }
 }

@@ -9,14 +9,15 @@
 <h3>Neuen Läufer anmelden</h3>
 
 <div class="@(this.RegistrationDone ? "display-none" : "")">
-<EditForm Model="@this.NewRunner" OnValidSubmit="@this.HandleValidSubmit">
+<EditForm EditContext="@this.CurrentEditContext" OnValidSubmit="@this.HandleValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
     
     <InputText id="firstname" @bind-Value="this.NewRunner.FirstName" />
     <InputText id="lastname" @bind-Value="this.NewRunner.LastName" />
-    <InputText id="username" @bind-Value="this.NewRunner.Username" @onchange="this.ReloadAndValidateUserName" @oninput="() => this.StateHasChanged()"   />
-    <p class="@(this.IsCurrentUserNameValid ? "display-none" : "")">Der angegeben Nutzername ist leider bereits vergeben. Bitte wähle einen anderen.</p>
+    @*<InputText id="username" @bind-Value="this.NewRunner.Username" @bind-Value:event="oninput" @onchange="this.ReloadPersistedRunnersAndValidateUserName"  />*@
+    <input id="username" type="text" @bind-value="this.NewRunner.Username" @bind-value:event="oninput" @onchange="this.ReloadPersistedRunnersAndValidateUserName" />
+    @*<p class="@(this.IsCurrentUserNameValid ? "display-none" : "")">Der angegeben Nutzername ist leider bereits vergeben. Bitte wähle einen anderen.</p>*@
     <InputText id="email" @bind-Value="this.NewRunner.Email" />
 
     <button type="submit">Submit</button>
