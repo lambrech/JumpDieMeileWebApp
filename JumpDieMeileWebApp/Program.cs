@@ -21,7 +21,7 @@ namespace JumpDieMeileWebApp
 
             //var mem = new MemoryPersistenceProvider();
             //builder.Services.AddSingleton<IPersistenceProvider>(mem);
-            builder.Services.AddSingleton<IPersistenceProvider>(new MemoryPersistenceProvider());
+            builder.Services.AddSingleton<IPersistenceProvider>(new DbRelayPersistenceProvider());
 
 
             //for (int i = 0; i < 300; i++)
