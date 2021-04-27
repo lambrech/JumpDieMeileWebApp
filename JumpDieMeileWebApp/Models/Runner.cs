@@ -19,7 +19,7 @@
         public string LastName { get; set; } = string.Empty;
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "Der Nutzername darf nicht leer sein.")]
-        [StringLength(40, ErrorMessage = "Der Username muss aus mindestens 4 Zeichen und maximal aus 40 Zeichen bestehen.", MinimumLength = 4)]
+        [StringLength(40, ErrorMessage = "Der Nutzername muss aus mindestens 4 Zeichen und maximal aus 40 Zeichen bestehen.", MinimumLength = 4)]
         [CustomValidation(typeof(Runner), nameof(CustomUsernameValidation))]
         public string Username { get; set; } = string.Empty;
 
@@ -34,14 +34,9 @@
             {
                 if (context.ObjectInstance is Runner runnerToValidate && runnerToValidate.GetValue(OtherRunnersHelperKey) is IList<Runner> otherRunners)
                 {
-                    if (ValidateUserName(runnerToValidate.Username, otherRunners))
-                    {
-                        return ValidationResult.Success;
-                    }
-                    else
-                    {
-                        return new ValidationResult("Der angegebene Nutzername ist leider bereits vergeben. Bitte wähle einen anderen.");
-                    }
+                    return ValidateUserName(runnerToValidate.Username, otherRunners)
+                        ? ValidationResult.Success
+                        : new ValidationResult("Der angegebene Nutzername ist leider bereits vergeben. Bitte wähle einen anderen.");
                 }
             }
             catch (Exception)

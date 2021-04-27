@@ -42,7 +42,7 @@
             <MudCardContent>
                 <MudTextField Label="Vorname" @bind-Value="this.NewRunner.FirstName" For="@(() => this.NewRunner.FirstName)"/>
                 <MudTextField Label="Nachname" @bind-Value="this.NewRunner.LastName" For="@(() => this.NewRunner.LastName)"/>
-                <MudTextField Label="Username" @bind-Value="this.NewRunner.Username" For="@(() => this.NewRunner.Username)" ErrorText="@this.CurrentUserNameErrorText()" Immediate="true"/>
+                <MudTextField Label="Nutzername" @bind-Value="this.NewRunner.Username" For="@(() => this.NewRunner.Username)" ErrorText="@this.CurrentUserNameErrorText()" Immediate="true"/>
                 <MudTextField Label="Email" @bind-Value="this.NewRunner.Email" For="@(() => this.NewRunner.Email)"/>
             </MudCardContent>
             <MudCardActions>

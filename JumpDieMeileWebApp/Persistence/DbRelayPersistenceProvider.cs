@@ -12,9 +12,15 @@
 
     public class DbRelayPersistenceProvider : IPersistenceProvider
     {
-        private static string RelayUri = "https://impulse-online.de/jdm_wa_db_relay/handle_post.php";
-        private static string RunnerTableName = "runner_table";
-        private static string RunTableName = "run_table";
+        private static readonly string RelayUri = "https://impulse-online.de/jdm_wa_db_relay/handle_post.php";
+
+        private static readonly string RunnerTableName = "runner_table";
+
+        private static readonly string RunTableName = "run_table";
+
+        private List<Runner> lastFetchedRunners = new();
+
+        private List<Run> lastFetchedRuns = new();
 
         public async Task<PersistResult> PersistRunner(Runner runner)
         {
@@ -29,17 +35,17 @@
 '{MySqlHelper.EscapeString(runner.Username)}',
 '{MySqlHelper.EscapeString(runner.Email)}');";
 
-                string response = await QuerySqlAsync(sql);
+                var response = await QuerySqlAsync(sql);
 
                 if (response.Contains("Query completed successfully"))
                 {
                     return new PersistResultSuccess();
                 }
-                else if (response.Contains("Query FAILED"))
+
+                if (response.Contains("Query FAILED"))
                 {
                     return new PersistResultError { ErrorMessage = "Fehler beim speichern." };
                 }
-
             }
             catch (Exception e)
             {
@@ -48,32 +54,6 @@
 
             return new PersistResultError { ErrorMessage = "Unexpected error" };
         }
-
-        private static async Task<string> QuerySqlAsync(string sql)
-        {
-            using var client = new HttpClient();
-            var request = new HttpRequestMessage()
-            {
-                RequestUri = new Uri(RelayUri),
-                Method = HttpMethod.Post,
-            };
-            request.Content = new StringContent(sql);
-
-            var protocolVersionBytes = BitConverter.GetBytes((int)1);
-            var payloadBytes = Encoding.UTF8.GetBytes(sql);
-            var payloadLength = BitConverter.GetBytes(payloadBytes.Length);
-
-            var finalPayload = protocolVersionBytes.Concat(payloadLength).Concat(payloadBytes).ToArray();
-
-            request.Content = new ByteArrayContent(finalPayload);
-            var result = await client.SendAsync(request);
-            return await result.Content.ReadAsStringAsync();
-        }
-
-
-        private List<Runner> lastFetchedRunners = new ();
-        private List<Run> lastFetchedRuns = new ();
-
 
         public async Task<IList<Runner>> GetAllPersistedRunners()
         {
@@ -97,12 +77,14 @@
                 return list;
             }
 
+#pragma warning disable CA2201 // Do not raise reserved exception types
             throw new Exception("Datenbank Rückgabe konnte nicht verarbeitet werden");
+#pragma warning restore CA2201 // Do not raise reserved exception types
         }
 
         public Task<PersistResult> PersistRun(Run run)
         {
-            return Task.FromResult((PersistResult)new PersistResultError() { ErrorMessage = "just not implemented yet" });
+            return Task.FromResult((PersistResult)new PersistResultError { ErrorMessage = "just not implemented yet" });
         }
 
         public async Task<IList<Run>> GetAllPersistedRuns()
@@ -127,13 +109,38 @@
                 return list;
             }
 
+#pragma warning disable CA2201 // Do not raise reserved exception types
             throw new Exception("Datenbank Rückgabe konnte nicht verarbeitet werden");
+#pragma warning restore CA2201 // Do not raise reserved exception types
+        }
+
+        private static async Task<string> QuerySqlAsync(string sql)
+        {
+            using var client = new HttpClient();
+            var request = new HttpRequestMessage
+            {
+                RequestUri = new Uri(RelayUri),
+                Method = HttpMethod.Post
+            };
+            request.Content = new StringContent(sql);
+
+            var protocolVersionBytes = BitConverter.GetBytes(1);
+            var payloadBytes = Encoding.UTF8.GetBytes(sql);
+            var payloadLength = BitConverter.GetBytes(payloadBytes.Length);
+
+            var finalPayload = protocolVersionBytes.Concat(payloadLength).Concat(payloadBytes).ToArray();
+
+            request.Content = new ByteArrayContent(finalPayload);
+            var result = await client.SendAsync(request);
+            return await result.Content.ReadAsStringAsync();
         }
     }
 
     public static class JsonSerializerExtensions
     {
-        public static T? DeserializeAnonymousType<T>(string json, T anonymousTypeObject, JsonSerializerOptions? options = default)
-            => JsonSerializer.Deserialize<T>(json, options);
+        public static T? DeserializeAnonymousType<T>(string json, T _, JsonSerializerOptions? options = default)
+        {
+            return JsonSerializer.Deserialize<T>(json, options);
+        }
     }
 }

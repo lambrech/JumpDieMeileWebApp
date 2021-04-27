@@ -1,53 +1,38 @@
-﻿<style>
+﻿@using JumpDieMeileWebApp.Models
+@using System.Runtime.CompilerServices
+<style>
     .display-none {
         display: none;
     }
 </style>
 
-
-
-@*<div class="@(this.RunRegistered ? "display-none" : "")" style="max-width: 400px;">
-    <EditForm EditContext="@this.CurrentEditContext"  OnValidSubmit="this.HandleValidSubmit">
-        <DataAnnotationsValidator />
+<div class="@(this.RunRegistered ? "display-none" : "")" style="max-width: 400px;">
+    <MudForm @ref="this.CurrentForm">
         <MudCard>
             <MudCardHeader>
                 <CardHeaderContent>
-                    <MudText Typo="Typo.h6">Neuen Lauf eintragen</MudText>
+                    <MudText Typo="Typo.h6">Neuen Lauf hinzufügen</MudText>
                 </CardHeaderContent>
             </MudCardHeader>
             <MudCardContent>
-                <MudTextField Label="Vorname" @bind-Value="this.NewRunner.FirstName" For="@(() => this.NewRunner.FirstName)"/>
-                <MudTextField Label="Nachname" @bind-Value="this.NewRunner.LastName" For="@(() => this.NewRunner.LastName)"/>
-                <MudTextField Label="Username" @bind-Value="this.NewRunner.Username" For="@(() => this.NewRunner.Username)" ErrorText="@this.CurrentUserNameErrorText()" Immediate="true"/>
-                <MudTextField Label="Email" @bind-Value="this.NewRunner.Email" For="@(() => this.NewRunner.Email)"/>
+                <MudAutocomplete Label="Läufer" @bind-Value="this.SelectedRunner" For="(() => this.SelectedRunner)" SearchFunc="this.RunnerSearchFunc"
+                                 ResetValueOnEmptyText="true" CoerceText="true" MinCharacters="3" MaxItems="null" Immediate="true" Variant="Variant.Outlined"
+                                 ToStringFunc="@(runner => { return runner?.FullDisplayName ?? string.Empty; })"
+                                 HelperText="Beginne deinen Nutzernamen einzugeben, du bekommst dann eine Auswahl angezeigt um deinen Nutzer auszuwählen."/>
+                <MudNumericField Label="Strecke" @bind-Value="this.Distance"  Variant="Variant.Outlined" Min="0" Max="500" For="(() => this.Distance)"
+                                 Adornment="Adornment.End" AdornmentText="km" HelperText="Bitte gib deine Strecke in km ein, z.B. '7,48'" Immediate="true" />
+                <MudDatePicker Label="Start Datum" @bind-Date="this.StartTimeLocalDate" For="@(() => this.StartTimeLocalDate)" InputVariant="Variant.Outlined"
+                               TitleDateFormat="dddd, dd MMMM" DateFormat="dd.MM.yyyy" ShowWeekNumbers="true" />
+                <MudTimePicker @ref="this.CurrentTimePicker" Label="Startzeit" @bind-Time="this.StartTimeLocalTime" For="@(() => this.StartTimeLocalTime)" InputVariant="Variant.Outlined"
+                               Editable="true" HelperText="Eingabeformat <HH:mm>. Z.B. 17:45" />
+                <MudNumericField Label="Dauer" @bind-Value="this.DurationInMinutes"  Variant="Variant.Outlined" 
+                                 Adornment="Adornment.End" AdornmentText="min" HelperText="Optional kannst du deine Laufdauer in Minuten eingeben" Min="0" Immediate="true" />
             </MudCardContent>
             <MudCardActions>
-                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Outlined" Color="Color.Primary" Class="ml-auto">Registrieren</MudButton>
+                <MudButton OnClick="@this.HandleValidSubmit" Variant="Variant.Outlined" Color="Color.Primary" Class="ml-auto">Hinzufügen</MudButton>
             </MudCardActions>
         </MudCard>
-    </EditForm>
-</div>*@
-
-<h3></h3>
-
-<div class="@(this.RunRegistered ? "display-none" : "")">
-    <EditForm EditContext="@this.CurrentEditContext" OnValidSubmit="@this.HandleValidSubmit">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
-    
-        <InputSelect id="selectedRunner" @bind-Value="this.SelectedRunner">
-            @foreach (var runner in this.allPersistedRunners)
-            {
-                <option value="@runner">@runner.FullDisplayName</option>
-            }
-        </InputSelect>
-        <InputNumber id="run_distance" @bind-Value="this.Distance" />
-        <InputDate id="run_startdate" @bind-Value="this.StartTimeLocalDate"></InputDate>
-        <InputText id="run_starttime" @bind-Value="this.StartTimeLocalTime"></InputText>
-        <InputText id="run_duration" @bind-Value="this.Duration"></InputText>
-
-        <button type="submit">Submit</button>
-    </EditForm>
+    </MudForm>
 </div>
 
 <div class="@(!this.RunRegistered ? "display-none" : "")">
@@ -67,4 +52,6 @@
     <p>
         @this.RegisteredRun?.AverageSpeedKmh
     </p>
+    
+    <MudButton OnClick="@this.Reset" Variant="Variant.Outlined">Weiteren Lauf eintragen</MudButton>
 </div>

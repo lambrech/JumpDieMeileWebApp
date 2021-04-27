@@ -14,6 +14,8 @@
     [Route(PageRoutes.RegisterRunnerRoute)]
     public partial class RegisterRunner
     {
+        private IList<Runner> allPersistedRunners = new List<Runner>();
+
         [Inject]
         public IPersistenceProvider PersistenceProvider { get; private set; } = null!;
 
@@ -28,7 +30,15 @@
 
         private EditContext CurrentEditContext { get; set; } = null!;
 
-        private IList<Runner> allPersistedRunners = new List<Runner>();
+        protected override async Task OnInitializedAsync()
+        {
+            this.RegisteredRunner = null;
+            this.RegistrationDone = false;
+            this.NewRunner = new Runner();
+            this.CurrentEditContext = new EditContext(this.NewRunner);
+            await this.ReloadPersistedRunnersAndValidateUserName();
+            await base.OnInitializedAsync();
+        }
 
         private async Task HandleValidSubmit()
         {
@@ -45,7 +55,7 @@
             await this.PersistenceProvider.PersistRunner(this.NewRunner);
             this.RegistrationDone = true;
             this.RegisteredRunner = this.NewRunner;
-            this.NewRunner = new ();
+            this.NewRunner = new Runner();
             this.StateHasChanged();
         }
 
@@ -56,16 +66,6 @@
             Console.WriteLine($"[{DateTime.Now}]: Finished reload");
             this.NewRunner.SetValue(Runner.OtherRunnersHelperKey, this.allPersistedRunners);
             this.CurrentEditContext?.NotifyValidationStateChanged();
-        }
-
-        protected override async Task OnInitializedAsync()
-        {
-            this.RegisteredRunner = null;
-            this.RegistrationDone = false;
-            this.NewRunner = new();
-            this.CurrentEditContext = new EditContext(this.NewRunner);
-            await this.ReloadPersistedRunnersAndValidateUserName();
-            await base.OnInitializedAsync();
         }
 
         private string? CurrentUserNameErrorText()

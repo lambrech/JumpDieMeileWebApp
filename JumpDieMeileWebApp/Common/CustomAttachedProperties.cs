@@ -12,7 +12,7 @@
         public static void SetValue<T>(this T obj, string name, object value)
             where T : class
         {
-            Dictionary<string, object> properties = ObjectAttachedPropertiesMapping.GetOrCreateValue(obj);
+            var properties = ObjectAttachedPropertiesMapping.GetOrCreateValue(obj);
 
             if (properties.ContainsKey(name))
             {
@@ -28,12 +28,7 @@
         [return: MaybeNull]
         public static T GetValue<T>(this object obj, string name)
         {
-            if (ObjectAttachedPropertiesMapping.TryGetValue(obj, out var properties) && properties.ContainsKey(name))
-            {
-                return (T)properties[name];
-            }
-
-            return default;
+            return ObjectAttachedPropertiesMapping.TryGetValue(obj, out var properties) && properties.ContainsKey(name) ? (T)properties[name] : default;
         }
 
         public static object? GetValue(this object obj, string name)
