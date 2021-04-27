@@ -3,6 +3,7 @@ namespace JumpDieMeileWebApp
     using System;
     using System.Net.Http;
     using System.Threading.Tasks;
+    using JumpDieMeileWebApp.Models;
     using JumpDieMeileWebApp.Persistence;
     using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
     using Microsoft.Extensions.DependencyInjection;
@@ -18,8 +19,16 @@ namespace JumpDieMeileWebApp
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
             builder.Services.AddMudServices();
 
-            builder.Services.AddSingleton<IPersistenceProvider>(new DbRelayPersistenceProvider());
-            //builder.Services.AddSingleton<IPersistenceProvider>(new MemoryPersistenceProvider());
+            //var mem = new MemoryPersistenceProvider();
+            //builder.Services.AddSingleton<IPersistenceProvider>(mem);
+            builder.Services.AddSingleton<IPersistenceProvider>(new MemoryPersistenceProvider());
+
+
+            //for (int i = 0; i < 300; i++)
+            //{
+            //    var runner = new Runner { FirstName = $"TestP{i}", LastName = "Alter", Username = $"run2_dude-{i}", Email = "web@web.de" };
+            //    await mem.PersistRunner(runner);
+            //}
 
             await builder.Build().RunAsync();
         }

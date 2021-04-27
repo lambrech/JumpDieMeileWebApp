@@ -70,12 +70,34 @@
             return await result.Content.ReadAsStringAsync();
         }
 
+
+        private List<Runner> lastFetchedRunners = new ();
+        private List<Run> lastFetchedRuns = new ();
+
+
         public async Task<IList<Runner>> GetAllPersistedRunners()
         {
+            var sqlCount = $"SELECT Count(*) as `count` FROM {RunnerTableName}";
+            var queryResultCount = await QuerySqlAsync(sqlCount);
+
+            var currentCount = JsonSerializerExtensions.DeserializeAnonymousType(queryResultCount.Trim().TrimStart('[').TrimEnd(']'), new { count = 0 })?.count;
+
+            if (currentCount == this.lastFetchedRunners.Count)
+            {
+                return this.lastFetchedRunners;
+            }
+
             var sql = $"SELECT * FROM {RunnerTableName}";
             var queryResult = await QuerySqlAsync(sql);
 
-            return JsonSerializer.Deserialize<List<Runner>>(queryResult) ?? throw new Exception("Datenbank Rückgabe konnte nicht verarbeitet werden");
+            var list = JsonSerializer.Deserialize<List<Runner>>(queryResult);
+            if (list != null)
+            {
+                this.lastFetchedRunners = list;
+                return list;
+            }
+
+            throw new Exception("Datenbank Rückgabe konnte nicht verarbeitet werden");
         }
 
         public Task<PersistResult> PersistRun(Run run)
@@ -85,10 +107,33 @@
 
         public async Task<IList<Run>> GetAllPersistedRuns()
         {
+            var sqlCount = $"SELECT Count(*) as `count` FROM {RunTableName}";
+            var queryResultCount = await QuerySqlAsync(sqlCount);
+
+            var currentCount = JsonSerializerExtensions.DeserializeAnonymousType(queryResultCount.Trim().TrimStart('[').TrimEnd(']'), new { count = 0 })?.count;
+
+            if (currentCount == this.lastFetchedRunners.Count)
+            {
+                return this.lastFetchedRuns;
+            }
+
             var sql = $"SELECT * FROM {RunTableName}";
             var queryResult = await QuerySqlAsync(sql);
 
-            return JsonSerializer.Deserialize<List<Run>>(queryResult) ?? throw new Exception("Datenbank Rückgabe konnte nicht verarbeitet werden");
+            var list = JsonSerializer.Deserialize<List<Run>>(queryResult);
+            if (list != null)
+            {
+                this.lastFetchedRuns = list;
+                return list;
+            }
+
+            throw new Exception("Datenbank Rückgabe konnte nicht verarbeitet werden");
         }
+    }
+
+    public static class JsonSerializerExtensions
+    {
+        public static T? DeserializeAnonymousType<T>(string json, T anonymousTypeObject, JsonSerializerOptions? options = default)
+            => JsonSerializer.Deserialize<T>(json, options);
     }
 }

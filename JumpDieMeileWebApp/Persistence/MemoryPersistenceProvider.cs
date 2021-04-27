@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text.Json;
     using System.Threading.Tasks;
     using JumpDieMeileWebApp.Models;
 
@@ -40,19 +41,23 @@
             }
         }
 
-        public Task<IList<Runner>> GetAllPersistedRunners()
+        public async Task<IList<Runner>> GetAllPersistedRunners()
         {
-            return Task.FromResult((IList<Runner>)this.persistedRunners);
+            await Task.Delay(3000);
+            return this.persistedRunners;
         }
 
-        public Task<PersistResult> PersistRun(Run run)
+        public async Task<PersistResult> PersistRun(Run run)
         {
-            throw new System.NotImplementedException();
+            await Task.Delay(2000);
+            this.persistedRuns.Add(run);
+            return new PersistResultSuccess();
         }
 
-        public Task<IList<Run>> GetAllPersistedRuns()
+        public async Task<IList<Run>> GetAllPersistedRuns()
         {
-            throw new System.NotImplementedException();
+            await Task.Delay(3000);
+            return this.persistedRuns;
         }
     }
 }
