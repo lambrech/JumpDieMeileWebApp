@@ -5,62 +5,30 @@
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using JumpDieMeileWebApp.Common;
-    using JumpDieMeileWebApp.Persistence;
 
-    public class Runner : ModelBase, IValidatableObject
+    public class Runner : ModelBase
     {
         public const string OtherRunnersHelperKey = "Helper_OtherRunners";
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "Der Vorname darf nicht leer sein.")]
+        [StringLength(40, ErrorMessage = "Der Vorname muss aus mindestens 2 Zeichen und maximal aus 40 Zeichen bestehen.", MinimumLength = 2)]
         public string FirstName { get; set; } = string.Empty;
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "Der Nachname darf nicht leer sein.")]
+        [StringLength(40, ErrorMessage = "Der Nachname muss aus mindestens 2 Zeichen und maximal aus 40 Zeichen bestehen.", MinimumLength = 2)]
         public string LastName { get; set; } = string.Empty;
 
-        private string username = string.Empty;
-
         [Required(AllowEmptyStrings = false, ErrorMessage = "Der Nutzername darf nicht leer sein.")]
+        [StringLength(40, ErrorMessage = "Der Username muss aus mindestens 4 Zeichen und maximal aus 40 Zeichen bestehen.", MinimumLength = 4)]
         [CustomValidation(typeof(Runner), nameof(CustomUsernameValidation))]
-        public string Username
-        {
-            get => this.username;
-
-            set
-            {
-                if (this.username == value)
-                {
-                    return;
-                }
-
-                this.username = value;
-                this.UsernameChanged?.Invoke(this, EventArgs.Empty);
-            }
-        }
-
-        public event EventHandler? UsernameChanged;
+        public string Username { get; set; } = string.Empty;
 
         [EmailAddress(ErrorMessage = "Die angegebene Email ist ungültig.")]
         public string Email { get; set; } = string.Empty;
 
         public string FullDisplayName => $"{this.Username} - {this.Id.ToString().Substring(0, 6)}";
 
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            var list = new List<ValidationResult>();
-
-            Console.WriteLine(validationContext.DisplayName);
-            Console.WriteLine(validationContext.ObjectType);
-            Console.WriteLine(validationContext.ObjectInstance.GetType());
-
-            if (validationContext.ObjectInstance is IHaveUserNameValidation usernameValidator)
-            {
-                list.Add(usernameValidator.ValidateUserName(this.Username));
-            }
-
-            return list;
-        }
-
-        public static ValidationResult CustomUsernameValidation(object _, ValidationContext context)
+        public static ValidationResult? CustomUsernameValidation(object _, ValidationContext context)
         {
             try
             {
@@ -68,7 +36,7 @@
                 {
                     if (ValidateUserName(runnerToValidate.Username, otherRunners))
                     {
-                        return ValidationResult.Success!;
+                        return ValidationResult.Success;
                     }
                     else
                     {
@@ -88,10 +56,5 @@
         {
             return existingRunners.All(x => x.Username != usernameToValidate);
         }
-    }
-
-    public interface IHaveUserNameValidation
-    {
-        ValidationResult ValidateUserName(string userName);
     }
 }

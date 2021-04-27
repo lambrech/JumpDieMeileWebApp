@@ -2,6 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.Linq;
     using System.Threading.Tasks;
     using JumpDieMeileWebApp.Common;
     using JumpDieMeileWebApp.Models;
@@ -14,36 +16,11 @@
         [Inject]
         public IPersistenceProvider PersistenceProvider { get; private set; } = null!;
 
-        private Runner newRunner = new();
-        
-        [Parameter]
-        public Runner NewRunner
-        {
-            get => this.newRunner;
+        private Runner NewRunner { get; set; } = new();
 
-            set
-            {
-                if (this.newRunner == value)
-                {
-                    return;
-                }
+        private bool RegistrationDone { get; set; }
 
-                this.newRunner.UsernameChanged -= this.OnNewRunnerUsernameChanged;
-                this.newRunner = value;
-                this.newRunner.UsernameChanged += this.OnNewRunnerUsernameChanged;
-            }
-        }
-
-        private void OnNewRunnerUsernameChanged(object? sender, EventArgs e)
-        {
-            this.CurrentEditContext.Validate();
-        }
-
-        [Parameter]
-        public bool RegistrationDone { get; set; }
-
-        [Parameter]
-        public Runner? RegisteredRunner { get; set; }
+        private Runner? RegisteredRunner { get; set; }
 
         private EditContext CurrentEditContext { get; set; } = null!;
 
@@ -51,7 +28,12 @@
 
         private async Task HandleValidSubmit()
         {
-            if (!await this.ReloadPersistedRunnersAndValidateUserName())
+            await this.ReloadPersistedRunnersAndValidateUserName();
+
+            var list = new List<ValidationResult>();
+            var isValid = Validator.TryValidateObject(this.NewRunner, new ValidationContext(this.NewRunner), list, true);
+
+            if (!isValid)
             {
                 return;
             }
@@ -63,20 +45,12 @@
             this.StateHasChanged();
         }
 
-        public bool IsCurrentUserNameValid => Runner.ValidateUserName(this.NewRunner.Username, this.allPersistedRunners);
-
-        private void Revalidate()
-        {
-            Console.WriteLine("Revalidating");
-            this.CurrentEditContext?.Validate();
-        }
-
-        private async Task<bool> ReloadPersistedRunnersAndValidateUserName()
+        private async Task ReloadPersistedRunnersAndValidateUserName()
         {
             Console.WriteLine("Reloading runners from db");
             this.allPersistedRunners = await this.PersistenceProvider.GetAllPersistedRunners();
             this.NewRunner.SetValue(Runner.OtherRunnersHelperKey, this.allPersistedRunners);
-            return this.IsCurrentUserNameValid;
+            this.CurrentEditContext?.NotifyValidationStateChanged();
         }
 
         protected override async Task OnInitializedAsync()
@@ -85,6 +59,18 @@
             this.CurrentEditContext = new EditContext(this.NewRunner);
             await this.ReloadPersistedRunnersAndValidateUserName();
             await base.OnInitializedAsync();
+        }
+
+        private string? CurrentUserNameErrorText()
+        {
+            var res = new List<ValidationResult>();
+            Validator.TryValidateProperty(this.NewRunner.Username, new ValidationContext(this.NewRunner) { MemberName = nameof(Runner.Username) }, res);
+            foreach (var message in res)
+            {
+                Console.WriteLine(message.ErrorMessage);
+            }
+
+            return res.FirstOrDefault()?.ErrorMessage;
         }
     }
 }

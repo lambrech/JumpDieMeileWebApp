@@ -8,22 +8,6 @@
 
 <h3>Neuen Läufer anmelden</h3>
 
-<div class="@(this.RegistrationDone ? "display-none" : "")">
-<EditForm EditContext="@this.CurrentEditContext" OnValidSubmit="@this.HandleValidSubmit">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-    
-    <InputText id="firstname" @bind-Value="this.NewRunner.FirstName" />
-    <InputText id="lastname" @bind-Value="this.NewRunner.LastName" />
-    @*<InputText id="username" @bind-Value="this.NewRunner.Username" @bind-Value:event="oninput" @onchange="this.ReloadPersistedRunnersAndValidateUserName"  />*@
-    <input id="username" type="text" @bind-value="this.NewRunner.Username" @bind-value:event="oninput" @onchange="this.ReloadPersistedRunnersAndValidateUserName" />
-    @*<p class="@(this.IsCurrentUserNameValid ? "display-none" : "")">Der angegeben Nutzername ist leider bereits vergeben. Bitte wähle einen anderen.</p>*@
-    <InputText id="email" @bind-Value="this.NewRunner.Email" />
-
-    <button type="submit">Submit</button>
-</EditForm>
-</div>
-
 <div class="@(!this.RegistrationDone ? "display-none" : "")">
     Danke für deine Anmeldung. Viel Spaß beim Laufen.???
     <p>
@@ -44,4 +28,22 @@
     <p>
         @this.RegisteredRunner?.FullDisplayName
     </p>
+</div>
+
+
+<div class="@(this.RegistrationDone ? "display-none" : "")" style="max-width: 400px;">
+    <EditForm EditContext="@this.CurrentEditContext"  OnValidSubmit="this.HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <MudCard>
+            <MudCardContent>
+                <MudTextField Label="Vorname" @bind-Value="this.NewRunner.FirstName" For="@(() => this.NewRunner.FirstName)" />
+                <MudTextField Label="Nachname" @bind-Value="this.NewRunner.LastName" For="@(() => this.NewRunner.LastName)" />
+                <MudTextField Label="Username" @bind-Value="this.NewRunner.Username" For="@(() => this.NewRunner.Username)" ErrorText="@this.CurrentUserNameErrorText()" Immediate="true"/>
+                <MudTextField Label="Email" @bind-Value="this.NewRunner.Email"  For="@(() => this.NewRunner.Email)" />
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Outlined" Color="Color.Primary" Class="ml-auto">Registrieren</MudButton>
+            </MudCardActions>
+        </MudCard>
+    </EditForm>
 </div>

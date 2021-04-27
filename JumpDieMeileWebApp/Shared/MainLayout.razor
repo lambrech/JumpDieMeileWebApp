@@ -1,5 +1,6 @@
 ﻿@inherits LayoutComponentBase
 
+<MudThemeProvider Theme="MyCustomTheme" />
 <div class="page">
     <div class="sidebar">
         <NavMenu />
@@ -11,3 +12,22 @@
         </div>
     </div>
 </div>
+
+@code
+{
+    MudTheme MyCustomTheme = new MudTheme()
+    {
+        Palette = new Palette()
+        {
+            Primary = Colors.Grey.Darken4,
+            Secondary = Colors.Red.Darken4,
+            AppbarBackground = Colors.Shades.White,
+        },
+
+        LayoutProperties = new LayoutProperties()
+        {
+            DrawerWidthLeft = "260px",
+            DrawerWidthRight = "300px"
+        }
+    };
+}

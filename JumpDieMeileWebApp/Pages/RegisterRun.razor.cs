@@ -69,10 +69,10 @@
             await base.OnInitializedAsync();
         }
 
-        public static ValidationResult IsValidTimespanString(string timespanString, ValidationContext _)
+        public static ValidationResult? IsValidTimespanString(string timespanString, ValidationContext _)
         {
             return string.IsNullOrWhiteSpace(timespanString) || TryGetTimeSpan(timespanString).HasValue
-                ? ValidationResult.Success!
+                ? ValidationResult.Success
                 : new ValidationResult("Die Zeiteingabe entspricht nicht dem erwarteten Format.");
         }
 

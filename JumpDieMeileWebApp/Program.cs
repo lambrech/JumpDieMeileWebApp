@@ -6,6 +6,7 @@ namespace JumpDieMeileWebApp
     using JumpDieMeileWebApp.Persistence;
     using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
     using Microsoft.Extensions.DependencyInjection;
+    using MudBlazor.Services;
 
     public class Program
     {
@@ -15,6 +16,7 @@ namespace JumpDieMeileWebApp
             builder.RootComponents.Add<App>("#app");
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+            builder.Services.AddMudServices();
 
             builder.Services.AddSingleton<IPersistenceProvider>(new MemoryPersistenceProvider());
 
