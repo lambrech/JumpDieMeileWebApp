@@ -51,8 +51,9 @@
 
         private async Task ReloadPersistedRunnersAndValidateUserName()
         {
-            Console.WriteLine("Reloading runners from db");
+            Console.WriteLine($"[{DateTime.Now}]: Reloading runners from db");
             this.allPersistedRunners = await this.PersistenceProvider.GetAllPersistedRunners();
+            Console.WriteLine($"[{DateTime.Now}]: Finished reload");
             this.NewRunner.SetValue(Runner.OtherRunnersHelperKey, this.allPersistedRunners);
             this.CurrentEditContext?.NotifyValidationStateChanged();
         }
