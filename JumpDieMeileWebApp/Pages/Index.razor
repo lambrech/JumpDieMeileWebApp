@@ -24,7 +24,9 @@
 
     private async Task Refresh()
     {
+        Console.WriteLine($"[{DateTime.Now}]: Reloading runs from db");
         this.Runs = await this.PersistenceProvider.GetAllPersistedRuns();
+        Console.WriteLine($"[{DateTime.Now}]: Finished reload");
         this.StateHasChanged();
     }
 }
