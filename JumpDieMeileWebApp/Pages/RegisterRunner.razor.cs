@@ -11,10 +11,14 @@
     using Microsoft.AspNetCore.Components;
     using Microsoft.AspNetCore.Components.Forms;
 
+    [Route(PageRoutes.RegisterRunnerRoute)]
     public partial class RegisterRunner
     {
         [Inject]
         public IPersistenceProvider PersistenceProvider { get; private set; } = null!;
+
+        [Inject]
+        public NavigationManager NavigationManager { get; private set; } = null!;
 
         private Runner NewRunner { get; set; } = new();
 
@@ -55,6 +59,8 @@
 
         protected override async Task OnInitializedAsync()
         {
+            this.RegisteredRunner = null;
+            this.RegistrationDone = false;
             this.NewRunner = new();
             this.CurrentEditContext = new EditContext(this.NewRunner);
             await this.ReloadPersistedRunnersAndValidateUserName();
@@ -65,11 +71,6 @@
         {
             var res = new List<ValidationResult>();
             Validator.TryValidateProperty(this.NewRunner.Username, new ValidationContext(this.NewRunner) { MemberName = nameof(Runner.Username) }, res);
-            foreach (var message in res)
-            {
-                Console.WriteLine(message.ErrorMessage);
-            }
-
             return res.FirstOrDefault()?.ErrorMessage;
         }
     }
