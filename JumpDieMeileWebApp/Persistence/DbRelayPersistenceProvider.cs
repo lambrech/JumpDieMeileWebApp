@@ -2,10 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Net.Http;
     using System.Text;
     using System.Text.Json;
+    using System.Text.Json.Serialization;
     using System.Threading.Tasks;
     using JumpDieMeileWebApp.Models;
     using MySql.Data.MySqlClient;
@@ -82,9 +84,38 @@
 #pragma warning restore CA2201 // Do not raise reserved exception types
         }
 
-        public Task<PersistResult> PersistRun(Run run)
+        public async Task<PersistResult> PersistRun(Run run)
         {
-            return Task.FromResult((PersistResult)new PersistResultError { ErrorMessage = "just not implemented yet" });
+            try
+            {
+                var sql =
+                    @$"INSERT INTO `{RunTableName}` (`Id`, `ModelVersion`, `CreationTimestampUtc`, `RunnerId`, `DistanceKm`, `StartTimestampUtc`, `Duration`) VALUES
+('{MySqlHelper.EscapeString(run.Id.ToString())}',
+{run.ModelVersion},
+'{MySqlHelper.EscapeString(JsonSerializer.Serialize(run.CreationTimestampUtc).Trim('\"'))}',
+'{MySqlHelper.EscapeString(run.Runner.Id.ToString())}',
+{run.DistanceKm},
+'{MySqlHelper.EscapeString(JsonSerializer.Serialize(run.StartTimestampUtc).Trim('\"'))}',
+{run.Duration?.Ticks.ToString(CultureInfo.InvariantCulture) ?? "NULL"});";
+
+                var response = await QuerySqlAsync(sql);
+
+                if (response.Contains("Query completed successfully"))
+                {
+                    return new PersistResultSuccess();
+                }
+
+                if (response.Contains("Query FAILED"))
+                {
+                    return new PersistResultError { ErrorMessage = "Fehler beim speichern." };
+                }
+            }
+            catch (Exception e)
+            {
+                return new PersistResultError { ErrorMessage = e.ToString() };
+            }
+
+            return new PersistResultError { ErrorMessage = "Unexpected error" };
         }
 
         public async Task<IList<Run>> GetAllPersistedRuns()
@@ -102,7 +133,12 @@
             var sql = $"SELECT * FROM {RunTableName}";
             var queryResult = await QuerySqlAsync(sql);
 
-            var list = JsonSerializer.Deserialize<List<Run>>(queryResult);
+            var currentRunners = await this.GetAllPersistedRunners();
+            var converter = new RunnerDeserializeJsonConverter(currentRunners);
+
+            var list = JsonSerializer.Deserialize<List<Run>>(
+                queryResult,
+                new JsonSerializerOptions { Converters = { converter, new TimeSpanDeserializeJsonConverter() } });
             if (list != null)
             {
                 this.lastFetchedRuns = list;
@@ -142,5 +178,56 @@
         {
             return JsonSerializer.Deserialize<T>(json, options);
         }
+    }
+
+    public class RunnerDeserializeJsonConverter : JsonConverter<Runner>
+    {
+        private readonly IList<Runner> availableRunners;
+
+        public RunnerDeserializeJsonConverter(IList<Runner> availableRunners)
+        {
+            this.availableRunners = availableRunners;
+        }
+
+        public override Runner? Read(
+            ref Utf8JsonReader reader,
+            Type typeToConvert,
+            JsonSerializerOptions options)
+        {
+            var guidString = reader.GetString();
+            return guidString != null ? this.availableRunners.FirstOrDefault(x => x.Id == Guid.Parse(guidString)) : null;
+        }
+
+        public override void Write(
+            Utf8JsonWriter writer,
+            Runner value,
+            JsonSerializerOptions options)
+        {
+            throw new NotImplementedException();
+        }
+        //writer.WriteStringValue(dateTimeValue.ToString(
+        //    "MM/dd/yyyy", CultureInfo.InvariantCulture));
+    }
+
+    public class TimeSpanDeserializeJsonConverter : JsonConverter<TimeSpan?>
+    {
+        public override TimeSpan? Read(
+            ref Utf8JsonReader reader,
+            Type typeToConvert,
+            JsonSerializerOptions options)
+        {
+            var timespanTicks = reader.GetInt64();
+            return TimeSpan.FromTicks(timespanTicks);
+        }
+
+        public override void Write(
+            Utf8JsonWriter writer,
+            TimeSpan? value,
+            JsonSerializerOptions options)
+        {
+            throw new NotImplementedException();
+        }
+        //writer.WriteStringValue(dateTimeValue.ToString(
+        //    "MM/dd/yyyy", CultureInfo.InvariantCulture));
     }
 }
