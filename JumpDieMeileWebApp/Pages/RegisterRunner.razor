@@ -27,27 +27,27 @@
     </EditForm>
 </div>
 
-<div class="@(!this.RegistrationDone ? "display-none" : "")">
-    Danke für deine Anmeldung. Viel Spaß beim Laufen.???
-    <p>
-        @this.RegisteredRunner?.Id
-    </p>
-    <p>
-        @this.RegisteredRunner?.FirstName
-    </p>
-    <p>
-        @this.RegisteredRunner?.LastName
-    </p>
-    <p>
-        @this.RegisteredRunner?.Email
-    </p>
-    <p>
-        @this.RegisteredRunner?.Username
-    </p>
-    <p>
-        @this.RegisteredRunner?.FullDisplayName
-    </p>
+<div class="@(!this.RegistrationDone ? "display-none" : "")" style="width: 360px;">
     
-    <MudButton OnClick="@(async () => { await this.OnInitializedAsync(); this.StateHasChanged(); })" Variant="Variant.Outlined">Weiteren Läufer melden</MudButton>
-    <MudButton OnClick="@(async () => { this.NavigationManager.NavigateTo(PageRoutes.RegisterRunRoute); })" Variant="Variant.Outlined">Einen Lauf eintragen</MudButton>
+    <MudCard Outlined="true" Elevation="4">
+        <MudCardHeader>
+            <CardHeaderContent>
+                <MudText Typo="Typo.h6">Danke für deine Anmeldung.<br />Viel Spaß beim Laufen.</MudText>
+            </CardHeaderContent>
+        </MudCardHeader>
+        <MudCardContent>
+            <MudTextField ReadOnly="true" Class="my-4" Label="Vollständiger Anzeigename" Value="this.RegisteredRunner?.FullDisplayName" Variant="Variant.Outlined"
+                          HelperText="Die Zeichenkette nach deinem Nutzernamen sind die ersten Zeichen deiner eindeutigen ID. Falls jemand durch einen technischen Fehler den gleichen Nutzernamen erstellen konnte wie du, hilft diese ID bei der Unterscheidung" />
+            <MudTextField ReadOnly="true" Class="my-4" Label="Vorname" Value="this.RegisteredRunner?.FirstName"  Variant="Variant.Outlined"/>
+            <MudTextField ReadOnly="true" Class="my-4" Label="Nachname" Value="this.RegisteredRunner?.LastName"  Variant="Variant.Outlined"/>
+            <MudTextField ReadOnly="true" Class="my-4" Label="Nutzername" Value="this.RegisteredRunner?.Username" Variant="Variant.Outlined" />
+            <MudTextField ReadOnly="true" Class="my-4" Label="Email" Value="this.RegisteredRunner?.Email" Variant="Variant.Outlined"/>
+        </MudCardContent>
+        <MudCardActions>
+            <MudButton  Class="ma-4" OnClick="@(async () => { await this.OnInitializedAsync(); this.StateHasChanged(); })" Variant="Variant.Outlined">Weiteren Läufer melden</MudButton>
+            <MudButton  Class="ma-4" OnClick="@(async () => { this.NavigationManager.NavigateTo(this.NavigationManager.ToAbsoluteUri(PageRoutes.RegisterRunRoute).AbsoluteUri); })"
+                       Variant="Variant.Outlined">Einen Lauf eintragen</MudButton>
+        </MudCardActions>
+    </MudCard>
+    
 </div>

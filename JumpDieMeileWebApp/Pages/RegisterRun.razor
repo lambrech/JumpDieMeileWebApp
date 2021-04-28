@@ -33,23 +33,28 @@
     </MudForm>
 </div>
 
-<div class="@(!this.RunRegistered ? "display-none" : "")">
-    Danke für deinen Eintrag.
-    <p>
-        @this.RegisteredRun?.Id
-    </p>
-    <p>
-        @this.RegisteredRun?.DistanceKm
-    </p>
-    <p>
-        @this.RegisteredRun?.StartTimestampUtc.ToLocalTime()
-    </p>
-    <p>
-        @this.RegisteredRun?.Duration
-    </p>
-    <p>
-        @this.RegisteredRun?.AverageSpeedKmh
-    </p>
+<div class="@(!this.RunRegistered ? "display-none" : "")" style="width: 360px;">
     
-    <MudButton OnClick="@this.Reset" Variant="Variant.Outlined">Weiteren Lauf eintragen</MudButton>
+    <MudCard Outlined="true" Elevation="4">
+        <MudCardHeader>
+            <CardHeaderContent>
+                <MudText Typo="Typo.h6">Danke für deinen Eintrag.</MudText>
+            </CardHeaderContent>
+        </MudCardHeader>
+        <MudCardContent>
+            <MudTextField ReadOnly="true" Class="my-4" Label="Läufer Anzeigename" Value="this.RegisteredRun?.Runner.FullDisplayName"  Variant="Variant.Outlined"/>
+            <MudTextField ReadOnly="true" Class="my-4" Label="Strecke" Value="@($"{this.RegisteredRun?.DistanceKm} km")"  Variant="Variant.Outlined"/>
+            <MudTextField ReadOnly="true" Class="my-4" Label="Start Datum" Value="@(this.RegisteredRun?.StartTimestampUtc.ToLocalTime().ToString("dd.MM.yyyy"))"  Variant="Variant.Outlined"/>
+            <MudTextField ReadOnly="true" Class="my-4" Label="Startzeit" Value="@($"{this.RegisteredRun?.StartTimestampUtc.ToLocalTime().ToString("HH:mm")} Uhr")"  Variant="Variant.Outlined"/>
+            @if (this.RegisteredRun?.Duration != null && this.RegisteredRun?.AverageSpeedKmh != null)
+            {
+                <MudTextField ReadOnly="true" Class="my-4" Label="Dauer" Value="@($"{this.RegisteredRun.Duration.Value.TotalMinutes} min")" Variant="Variant.Outlined" />
+                <MudTextField ReadOnly="true" Class="my-4" Label="Deine Geschwindigkeit" Value="@($"{this.RegisteredRun.AverageSpeedKmh.Value.ToString("####.####")} km/h")" Variant="Variant.Outlined" />
+            }
+        </MudCardContent>
+        <MudCardActions>
+            <MudButton Class="ma-4" OnClick="@this.Reset" Variant="Variant.Outlined">Weiteren Lauf eintragen</MudButton>
+        </MudCardActions>
+    </MudCard>
+    
 </div>
