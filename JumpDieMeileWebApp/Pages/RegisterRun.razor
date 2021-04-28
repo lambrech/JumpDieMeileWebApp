@@ -1,35 +1,32 @@
-﻿@using JumpDieMeileWebApp.Models
-@using System.Runtime.CompilerServices
-<style>
+﻿<style>
     .display-none {
         display: none;
     }
 </style>
 
-<div class="@(this.RunRegistered ? "display-none" : "")" style="max-width: 400px;">
+<div class="@(this.RunRegistered ? "display-none" : "")" style="width: 400px;">
     <MudForm @ref="this.CurrentForm">
-        <MudCard>
+        <MudCard Outlined="true" Elevation="4">
             <MudCardHeader>
                 <CardHeaderContent>
                     <MudText Typo="Typo.h6">Neuen Lauf hinzufügen</MudText>
                 </CardHeaderContent>
             </MudCardHeader>
             <MudCardContent>
-                <MudAutocomplete Label="Läufer" @bind-Value="this.SelectedRunner" For="(() => this.SelectedRunner)" SearchFunc="this.RunnerSearchFunc"
+                <MudAutocomplete Class="my-2" Label="Läufer" @bind-Value="this.SelectedRunner" For="(() => this.SelectedRunner)" SearchFunc="this.RunnerSearchFunc"
                                  ResetValueOnEmptyText="true" CoerceText="true" MinCharacters="3" MaxItems="null" Immediate="true" Variant="Variant.Outlined"
                                  ToStringFunc="@(runner => { return runner?.FullDisplayName ?? string.Empty; })"
                                  HelperText="Beginne deinen Nutzernamen einzugeben, du bekommst dann eine Auswahl angezeigt um deinen Nutzer auszuwählen."/>
-                <MudNumericField Label="Strecke" @bind-Value="this.Distance"  Variant="Variant.Outlined" Min="0" Max="500" For="(() => this.Distance)"
+                <MudNumericField Class="my-2" Label="Strecke" @bind-Value="this.Distance"  Variant="Variant.Outlined" Min="0" Max="500" For="(() => this.Distance)"
                                  Adornment="Adornment.End" AdornmentText="km" HelperText="Bitte gib deine Strecke in km ein, z.B. '7,48'" Immediate="true" />
-                <MudDatePicker Label="Start Datum" @bind-Date="this.StartTimeLocalDate" For="@(() => this.StartTimeLocalDate)" InputVariant="Variant.Outlined"
+                <MudDatePicker Class="my-2" Label="Start Datum" @bind-Date="this.StartTimeLocalDate" For="@(() => this.StartTimeLocalDate)" InputVariant="Variant.Outlined"
                                TitleDateFormat="dddd, dd MMMM" DateFormat="dd.MM.yyyy" ShowWeekNumbers="true" />
-                <MudTimePicker @ref="this.CurrentTimePicker" Label="Startzeit" @bind-Time="this.StartTimeLocalTime" For="@(() => this.StartTimeLocalTime)" InputVariant="Variant.Outlined"
-                               Editable="true" HelperText="Eingabeformat <HH:mm>. Z.B. 17:45" />
-                <MudNumericField Label="Dauer" @bind-Value="this.DurationInMinutes"  Variant="Variant.Outlined" 
+                <MudTimePicker Class="my-2" @ref="this.CurrentTimePicker" Label="Startzeit" @bind-Time="this.StartTimeLocalTime" For="@(() => this.StartTimeLocalTime)" InputVariant="Variant.Outlined" />
+                <MudNumericField Class="my-2" Label="Dauer (Optional)" @bind-Value="this.DurationInMinutes"  Variant="Variant.Outlined" 
                                  Adornment="Adornment.End" AdornmentText="min" HelperText="Optional kannst du deine Laufdauer in Minuten eingeben" Min="0" Immediate="true" />
             </MudCardContent>
             <MudCardActions>
-                <MudButton OnClick="@this.HandleValidSubmit" Variant="Variant.Outlined" Color="Color.Primary" Class="ml-auto">Hinzufügen</MudButton>
+                <MudButton OnClick="@this.HandleValidSubmit" Variant="Variant.Outlined" Color="Color.Primary" Class="ml-auto ma-2">Hinzufügen</MudButton>
             </MudCardActions>
         </MudCard>
     </MudForm>

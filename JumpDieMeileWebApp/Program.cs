@@ -34,3 +34,11 @@ namespace JumpDieMeileWebApp
         }
     }
 }
+
+/*
+ * Work to do:
+ * Performance when loading ~10000 rows
+ * On saving handling / On loading handling
+ *
+ * After register pages
+ */

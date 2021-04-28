@@ -1,15 +1,43 @@
-﻿@inherits LayoutComponentBase
+﻿@using JumpDieMeileWebApp.Pages
+@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
+
+<style>
+    .vertical-wrap-panel {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        align-items: stretch;
+        align-content: stretch;
+    }
+
+    .horizontal-wrap-panel-center {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: flex-start;
+        align-content: stretch;
+    }
+</style>
 
 <MudThemeProvider Theme="MyCustomTheme" />
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
+<div class="vertical-wrap-panel">
+    <div class="horizontal-wrap-panel-center">
+        <MudPaper Class="ma-4">
+            <MudButton OnClick="@(() => { this.NavigationManager.NavigateTo("/"); })" Color="Color.Secondary" Variant="Variant.Filled">Übersicht</MudButton>
+        </MudPaper>
+        <MudPaper Class="ma-4">
+            <MudButton OnClick="@(() => { this.NavigationManager.NavigateTo(PageRoutes.RegisterRunRoute); })" Color="Color.Secondary" Variant="Variant.Filled">Lauf eintragen</MudButton>
+        </MudPaper>
+        <MudPaper Class="ma-4">
+            <MudButton OnClick="@(() => { this.NavigationManager.NavigateTo(PageRoutes.RegisterRunnerRoute); })" Color="Color.Secondary" Variant="Variant.Filled">Läufer registrieren</MudButton>
+        </MudPaper>
     </div>
 
-    <div class="main">
-        <div class="content px-4">
-            @Body
-        </div>
+    <div class="horizontal-wrap-panel-center ma-4">
+        @Body
     </div>
 </div>
 
@@ -19,8 +47,8 @@
     {
         Palette = new Palette()
         {
-            Primary = Colors.Grey.Darken4,
-            Secondary = Colors.Red.Darken4,
+            Primary = "#757679",
+            Secondary = "#C30039",
             AppbarBackground = Colors.Shades.White,
         },
 
