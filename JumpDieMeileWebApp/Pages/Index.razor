@@ -12,7 +12,7 @@
     [Inject]
     public IPersistenceProvider PersistenceProvider { get; private set; } = null!;
 
-    private IList<Run> Runs { get; set; } = null!;
+    private IList<Run> Runs { get; set; } = new List<Run>();
 
     private decimal TotalDistance => this.Runs.Sum(x => x.DistanceKm);
 
