@@ -45,7 +45,7 @@
         </MudCardContent>
         <MudCardActions>
             <MudButton  Class="ma-4" OnClick="@(async () => { await this.OnInitializedAsync(); this.StateHasChanged(); })" Variant="Variant.Outlined">Weiteren Läufer melden</MudButton>
-            <MudButton  Class="ma-4" OnClick="@(async () => { this.NavigationManager.NavigateTo(this.NavigationManager.ToAbsoluteUri(PageRoutes.RegisterRunRoute).AbsoluteUri); })"
+            <MudButton  Class="ma-4" OnClick="@(async () => { this.NavigationManager.NavigateTo(this.NavigationManager.CreateRoute(PageRoutes.RegisterRunRoute)); })"
                        Variant="Variant.Outlined">Einen Lauf eintragen</MudButton>
         </MudCardActions>
     </MudCard>

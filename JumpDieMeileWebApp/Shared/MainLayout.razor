@@ -26,20 +26,14 @@
 <div class="vertical-wrap-panel">
     <div class="horizontal-wrap-panel-center">
         <MudPaper Class="ma-4">
-            <MudButton OnClick="@(this.Test)" Color="Color.Secondary" Variant="Variant.Filled">Test</MudButton>
+            <MudButton OnClick="@(() => { this.NavigationManager.NavigateTo(this.NavigationManager.CreateRoute("/")); })" Color="Color.Secondary" Variant="Variant.Filled">Übersicht</MudButton>
         </MudPaper>
         <MudPaper Class="ma-4">
-            <MudButton OnClick="@(this.Test2)" Color="Color.Secondary" Variant="Variant.Filled">manualNav</MudButton>
-        </MudPaper>
-        <MudPaper Class="ma-4">
-            <MudButton OnClick="@(() => { Console.WriteLine(this.NavigationManager.BaseUri); Console.WriteLine(this.NavigationManager.Uri); this.NavigationManager.NavigateTo("/"); })" Color="Color.Secondary" Variant="Variant.Filled">Übersicht</MudButton>
-        </MudPaper>
-        <MudPaper Class="ma-4">
-            <MudButton OnClick="@(() => { this.NavigationManager.NavigateTo(this.NavigationManager.ToAbsoluteUri(PageRoutes.RegisterRunRoute).AbsoluteUri); })"
+            <MudButton OnClick="@(() => { this.NavigationManager.NavigateTo(this.NavigationManager.CreateRoute(PageRoutes.RegisterRunRoute)); })"
                        Color="Color.Secondary" Variant="Variant.Filled">Lauf eintragen</MudButton>
         </MudPaper>
         <MudPaper Class="ma-4">
-            <MudButton OnClick="@(() => { this.NavigationManager.NavigateTo(this.NavigationManager.ToAbsoluteUri(PageRoutes.RegisterRunnerRoute).AbsoluteUri); })"
+            <MudButton OnClick="@(() => { this.NavigationManager.NavigateTo(this.NavigationManager.CreateRoute(PageRoutes.RegisterRunnerRoute)); })"
                        Color="Color.Secondary" Variant="Variant.Filled">Läufer registrieren</MudButton>
         </MudPaper>
     </div>
@@ -66,20 +60,4 @@
             DrawerWidthRight = "300px"
         }
     };
-
-    private void Test()
-    {
-        Console.WriteLine($"[{DateTime.Now}]: {nameof(this.NavigationManager.BaseUri)}: {this.NavigationManager.BaseUri}");
-        Console.WriteLine($"[{DateTime.Now}]: {nameof(this.NavigationManager.Uri)}: {this.NavigationManager.Uri}");
-        Console.WriteLine($"[{DateTime.Now}]: {nameof(this.NavigationManager.ToAbsoluteUri)}: {this.NavigationManager.ToAbsoluteUri(PageRoutes.RegisterRunnerRoute).AbsoluteUri}");
-        Console.WriteLine($"[{DateTime.Now}]: {nameof(this.NavigationManager.ToAbsoluteUri)}: {this.NavigationManager.ToAbsoluteUri(PageRoutes.RegisterRunnerRoute).AbsolutePath}");
-        Console.WriteLine($"[{DateTime.Now}]: Manual: {this.NavigationManager.BaseUri.TrimEnd().TrimEnd('/') + PageRoutes.RegisterRunnerRoute}");
-
-    }
-
-    private void Test2()
-    {
-        var path = this.NavigationManager.BaseUri.TrimEnd().TrimEnd('/') + PageRoutes.RegisterRunnerRoute;
-        this.NavigationManager.NavigateTo(path);
-    }
 }
