@@ -96,7 +96,9 @@
             }
 
             await Task.Delay(50);
-            var matches = this.allPersistedRunners.Where(x => x.FullDisplayName.ToLower(CultureInfo.CurrentCulture).Contains(arg)).ToList();
+            var matches = this.allPersistedRunners
+                              .Where(x => x.FullDisplayName.ToLower(CultureInfo.CurrentCulture).Contains(arg.ToLower(CultureInfo.CurrentCulture)))
+                              .ToList();
 
             return matches;
         }
