@@ -3,7 +3,6 @@ namespace JumpDieMeileWebApp
     using System;
     using System.Net.Http;
     using System.Threading.Tasks;
-    using JumpDieMeileWebApp.Models;
     using JumpDieMeileWebApp.Persistence;
     using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
     using Microsoft.Extensions.DependencyInjection;
@@ -41,4 +40,6 @@ namespace JumpDieMeileWebApp
  * On saving handling / On loading handling
  *
  * After register pages
+ *
+ * Initial load animation
  */

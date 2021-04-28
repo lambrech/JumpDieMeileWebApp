@@ -4,7 +4,7 @@
     }
 </style>
 
-<div class="@(this.RunRegistered ? "display-none" : "")" style="width: 400px;">
+<div class="@(this.RunRegistered ? "display-none" : "")" style="width: 360px;">
     <MudForm @ref="this.CurrentForm">
         <MudCard Outlined="true" Elevation="4">
             <MudCardHeader>
@@ -20,8 +20,9 @@
                 <MudNumericField Class="my-2" Label="Strecke" @bind-Value="this.Distance"  Variant="Variant.Outlined" Min="0" Max="500" For="(() => this.Distance)"
                                  Adornment="Adornment.End" AdornmentText="km" HelperText="Bitte gib deine Strecke in km ein, z.B. '7,48'" Immediate="true" />
                 <MudDatePicker Class="my-2" Label="Start Datum" @bind-Date="this.StartTimeLocalDate" For="@(() => this.StartTimeLocalDate)" InputVariant="Variant.Outlined"
-                               TitleDateFormat="dddd, dd MMMM" DateFormat="dd.MM.yyyy" ShowWeekNumbers="true" />
-                <MudTimePicker Class="my-2" @ref="this.CurrentTimePicker" Label="Startzeit" @bind-Time="this.StartTimeLocalTime" For="@(() => this.StartTimeLocalTime)" InputVariant="Variant.Outlined" />
+                               TitleDateFormat="dddd, dd MMMM" DateFormat="dd.MM.yyyy" ShowWeekNumbers="true" Color="Color.Secondary" />
+                <MudTimePicker Class="my-2" @ref="this.CurrentTimePicker" Label="Startzeit" @bind-Time="this.StartTimeLocalTime" For="@(() => this.StartTimeLocalTime)"
+                               InputVariant="Variant.Outlined" Editable="true" Color="Color.Secondary" HelperText="Eingabeformat <HH:mm>. Z.B. 17:45" />
                 <MudNumericField Class="my-2" Label="Dauer (Optional)" @bind-Value="this.DurationInMinutes"  Variant="Variant.Outlined" 
                                  Adornment="Adornment.End" AdornmentText="min" HelperText="Optional kannst du deine Laufdauer in Minuten eingeben" Min="0" Immediate="true" />
             </MudCardContent>
