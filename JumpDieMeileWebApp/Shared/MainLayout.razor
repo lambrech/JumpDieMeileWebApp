@@ -26,7 +26,7 @@
 <div class="vertical-wrap-panel">
     <div class="horizontal-wrap-panel-center">
         <MudPaper Class="ma-4">
-            <MudButton OnClick="@(() => { this.NavigationManager.NavigateTo("/"); })" Color="Color.Secondary" Variant="Variant.Filled">Übersicht</MudButton>
+            <MudButton OnClick="@(() => { Console.WriteLine(this.NavigationManager.BaseUri); Console.WriteLine(this.NavigationManager.Uri); this.NavigationManager.NavigateTo("/"); })" Color="Color.Secondary" Variant="Variant.Filled">Übersicht</MudButton>
         </MudPaper>
         <MudPaper Class="ma-4">
             <MudButton OnClick="@(() => { this.NavigationManager.NavigateTo(PageRoutes.RegisterRunRoute); })" Color="Color.Secondary" Variant="Variant.Filled">Lauf eintragen</MudButton>
