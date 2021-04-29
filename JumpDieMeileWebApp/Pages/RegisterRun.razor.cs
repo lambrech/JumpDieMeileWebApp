@@ -42,12 +42,12 @@
 
         private MudForm CurrentForm { get; set; } = null!;
         
-        private MudTimePicker CurrentTimePicker { get; set; } = null!;
+        private OwnMudTimePicker CurrentTimePicker { get; set; } = null!;
 
         protected override async Task OnInitializedAsync()
         {
             this.CurrentForm = new MudForm();
-            this.CurrentTimePicker = new MudTimePicker();
+            this.CurrentTimePicker = new OwnMudTimePicker();
             await this.ReloadPersistedRunners();
             await base.OnInitializedAsync();
         }
