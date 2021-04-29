@@ -23,7 +23,9 @@
 </style>
 
 <MudThemeProvider Theme="MyCustomTheme" />
-<div class="vertical-wrap-panel">
+<div class="vertical-wrap-panel"
+     @ontouchstart="@(args => { Console.WriteLine(args); Console.WriteLine(args.Touches.FirstOrDefault()?.ClientX); })"
+     >
     <div class="horizontal-wrap-panel-center">
         <MudPaper Class="ma-4">
             <MudButton OnClick="@(() => { this.NavigationManager.NavigateTo(this.NavigationManager.CreateRoute("/")); })" Color="Color.Secondary" Variant="Variant.Filled">Übersicht</MudButton>
