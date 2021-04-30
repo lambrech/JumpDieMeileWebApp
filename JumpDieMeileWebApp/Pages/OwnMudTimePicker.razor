@@ -2,12 +2,7 @@
 @inherits MudPicker<TimeSpan?>
 @namespace JumpDieMeileWebApp.Pages
 
-<div @ontouchmove="@((args) => { this.CallJsInterop(args); })"
-     @ontouchstart="this.OnTouchStart"
-     @ontouchend="this.OnTouchEnd"
-     >
 @Render
-</div>
 
 @code{
 
@@ -39,7 +34,9 @@
             <div class="mud-picker-time-container">
                 <div class="mud-picker-time-clock">
                     <div role="menu" tabindex="-1" class="mud-picker-time-clock-mask"
-                         
+                         @ontouchmove="((args) => { this.CallJsInterop(args); })"
+                         @ontouchstart="this.OnTouchStart"
+                         @ontouchend="this.OnTouchEnd"
                           @onmousedown="OnMouseDown" @onmouseup="OnMouseUp">
                         <div class="@GetClockPinColor()"></div>
                         <div class="@GetClockPointerColor()" style="height: @GetPointerHeight(); transform: @GetPointerRotation()">
@@ -107,8 +104,7 @@
                                 var _i = i;
                                 <div class="mud-picker-stick mud-minute" style="@($"transform: rotateZ({_i * 6}deg);")" id="@($"workarounds_are_kind_of_annoying_{_i}")"
                                      @onclick="(() => OnMouseClickMinute(_i))"
-                                     @onmouseover="@(() => { OnMouseOverMinute(_i);  })"
-                                     @onclick:stopPropagation="true"></div>
+                                     @onmouseover="(() => { OnMouseOverMinute(_i);  })" @onclick:stopPropagation="true"></div>
                             }
                         </div>
                     </div>
