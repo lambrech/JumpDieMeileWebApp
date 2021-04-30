@@ -84,8 +84,9 @@
 
         private async Task ReloadPersistedRunners()
         {
-            Console.WriteLine("Reloading runners from db");
+            Console.WriteLine($"[{DateTime.Now}]: Reloading runners from db");
             this.allPersistedRunners = await this.PersistenceProvider.GetAllPersistedRunners();
+            Console.WriteLine($"[{DateTime.Now}]: Finished reload");
         }
 
         private async Task<IEnumerable<Runner?>> RunnerSearchFunc(string? arg)

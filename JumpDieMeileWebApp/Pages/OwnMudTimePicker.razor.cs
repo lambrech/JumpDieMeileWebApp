@@ -499,7 +499,6 @@
         {
             if ((this.getElementByPointsHelper != null) && eventArgs.Touches.FirstOrDefault() is { } touch)
             {
-                Console.WriteLine($"We got the args, just fine {touch.ClientX} {touch.ClientY}");
                 var mouseOverElementId = await this.getElementByPointsHelper.InvokeAsync<string>("documentElementFromPoint", touch.ClientX, touch.ClientY)
                                                    .AsTask();
 
