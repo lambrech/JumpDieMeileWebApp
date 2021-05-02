@@ -15,20 +15,20 @@
                 </CardHeaderContent>
             </MudCardHeader>
             <MudCardContent>
-                <MudTextField Class="my-2" Label="Vorname" @bind-Value="this.NewRunner.FirstName" For="@(() => this.NewRunner.FirstName)" Variant="Variant.Outlined"/>
-                <MudTextField Class="my-2" Label="Nachname" @bind-Value="this.NewRunner.LastName" For="@(() => this.NewRunner.LastName)" Variant="Variant.Outlined"/>
-                <MudTextField Class="my-2" Label="Nutzername" @bind-Value="this.NewRunner.Username" For="@(() => this.NewRunner.Username)" ErrorText="@this.CurrentUserNameErrorText()"
+                <MudTextField id="firstName" Class="my-2" Label="Vorname" @bind-Value="this.NewRunner.FirstName" For="@(() => this.NewRunner.FirstName)" Variant="Variant.Outlined"/>
+                <MudTextField id="lastName" Class="my-2" Label="Nachname" @bind-Value="this.NewRunner.LastName" For="@(() => this.NewRunner.LastName)" Variant="Variant.Outlined"/>
+                <MudTextField id="userName" Class="my-2" Label="Nutzername" @bind-Value="this.NewRunner.Username" For="@(() => this.NewRunner.Username)" ErrorText="@this.CurrentUserNameErrorText()"
                               Variant="Variant.Outlined" Immediate="true" HelperText="Dieser Name könnte für andere Nutzer sichtbar sein. Falls du anonym bleiben möchtest, verwende ein Pseudonym."/>
-                <MudTextField Class="my-2" Label="Email" @bind-Value="this.NewRunner.Email" For="@(() => this.NewRunner.Email)" Variant="Variant.Outlined"/>
-                <MudTextField Class="my-2" Label="Wohnort" @bind-Value="this.NewRunner.Location" For="@(() => this.NewRunner.Location)" Variant="Variant.Outlined"/>
-                <MudTextField Class="my-2" Label="PLZ" @bind-Value="this.NewRunner.Postcode" For="@(() => this.NewRunner.Postcode)" Variant="Variant.Outlined"/>
-                <MudTextField Class="my-2" Label="Straße und Hausnummer" @bind-Value="this.NewRunner.StreetHouseNr" For="@(() => this.NewRunner.StreetHouseNr)" Variant="Variant.Outlined"/>
-                <MudSelect Class="my-2" Label="Geschlecht" @bind-Value="this.NewRunner.Gender"  Variant="Variant.Outlined" >
+                <MudTextField id="email" Class="my-2" Label="Email" @bind-Value="this.NewRunner.Email" For="@(() => this.NewRunner.Email)" Variant="Variant.Outlined"/>
+                <MudTextField id="location" Class="my-2" Label="Wohnort" @bind-Value="this.NewRunner.Location" For="@(() => this.NewRunner.Location)" Variant="Variant.Outlined"/>
+                <MudTextField id="postcode" Class="my-2" Label="PLZ" @bind-Value="this.NewRunner.Postcode" For="@(() => this.NewRunner.Postcode)" Variant="Variant.Outlined"/>
+                <MudTextField id="streetAndNumber" Class="my-2" Label="Straße und Hausnummer" @bind-Value="this.NewRunner.StreetHouseNr" For="@(() => this.NewRunner.StreetHouseNr)" Variant="Variant.Outlined"/>
+                <MudSelect id="gender" Class="my-2" Label="Geschlecht" @bind-Value="this.NewRunner.Gender"  Variant="Variant.Outlined" >
                     <MudSelectItem Value="@((Gender?)Gender.Male)" >@DisplayExtensions.ToDisplayString(Gender.Male)</MudSelectItem>
                     <MudSelectItem Value="@((Gender?)Gender.Female)" >@DisplayExtensions.ToDisplayString(Gender.Female)</MudSelectItem>
                     <MudSelectItem Value="@((Gender?)Gender.Divers)" >@DisplayExtensions.ToDisplayString(Gender.Divers)</MudSelectItem>
                 </MudSelect>
-                <MudTextField Class="my-2" Label="Anmerkung (Optional)" @bind-Value="this.NewRunner.Comment" For="@(() => this.NewRunner.Comment)" Variant="Variant.Outlined" Lines="4"/>
+                <MudTextField id="comment" Class="my-2" Label="Anmerkung (Optional)" @bind-Value="this.NewRunner.Comment" For="@(() => this.NewRunner.Comment)" Variant="Variant.Outlined" Lines="4"/>
             </MudCardContent>
             <MudCardActions>
                 <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Outlined" Color="Color.Primary" Class="ml-auto ma-2">Registrieren</MudButton>
