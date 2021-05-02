@@ -23,7 +23,7 @@
                 <MudTextField id="location" Class="my-2" Label="Wohnort" @bind-Value="this.NewRunner.Location" For="@(() => this.NewRunner.Location)" Variant="Variant.Outlined"/>
                 <MudTextField id="postcode" Class="my-2" Label="PLZ" @bind-Value="this.NewRunner.Postcode" For="@(() => this.NewRunner.Postcode)" Variant="Variant.Outlined"/>
                 <MudTextField id="streetAndNumber" Class="my-2" Label="Straße und Hausnummer" @bind-Value="this.NewRunner.StreetHouseNr" For="@(() => this.NewRunner.StreetHouseNr)" Variant="Variant.Outlined"/>
-                <MudSelect id="gender" Class="my-2" Label="Geschlecht" @bind-Value="this.NewRunner.Gender"  Variant="Variant.Outlined" >
+                <MudSelect id="gender" Class="my-2" Label="Geschlecht" @bind-Value="this.NewRunner.Gender" For="@(() => this.NewRunner.Gender)"  Variant="Variant.Outlined" >
                     <MudSelectItem Value="@((Gender?)Gender.Male)" >@DisplayExtensions.ToDisplayString(Gender.Male)</MudSelectItem>
                     <MudSelectItem Value="@((Gender?)Gender.Female)" >@DisplayExtensions.ToDisplayString(Gender.Female)</MudSelectItem>
                     <MudSelectItem Value="@((Gender?)Gender.Divers)" >@DisplayExtensions.ToDisplayString(Gender.Divers)</MudSelectItem>
@@ -36,6 +36,7 @@
         </MudCard>
     </EditForm>
 </div>
+
 
 <div class="@(!this.RegistrationDone ? "display-none" : "")" style="min-width: 325px; width: 50%;">
     
