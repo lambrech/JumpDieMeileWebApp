@@ -28,14 +28,19 @@
         {
             try
             {
-                var sql = @$"INSERT INTO `{RunnerTableName}` (`Id`, `ModelVersion`, `CreationTimestampUtc`, `FirstName`, `LastName`, `Username`, `Email`) VALUES
+                var sql = @$"INSERT INTO `{RunnerTableName}` (`Id`, `ModelVersion`, `CreationTimestampUtc`, `FirstName`, `LastName`, `Username`, `Email`, `Location`, `Postcode`, `StreetHouseNr`, `Gender`, `Comment`) VALUES
 ('{MySqlHelper.EscapeString(runner.Id.ToString())}',
 {runner.ModelVersion},
 '{MySqlHelper.EscapeString(JsonSerializer.Serialize(runner.CreationTimestampUtc).Trim('\"'))}',
 '{MySqlHelper.EscapeString(runner.FirstName)}',
 '{MySqlHelper.EscapeString(runner.LastName)}',
 '{MySqlHelper.EscapeString(runner.Username)}',
-'{MySqlHelper.EscapeString(runner.Email)}');";
+'{MySqlHelper.EscapeString(runner.Email)}',
+'{MySqlHelper.EscapeString(runner.Location)}',
+'{MySqlHelper.EscapeString(runner.Postcode)}',
+'{MySqlHelper.EscapeString(runner.StreetHouseNr)}',
+'{(runner.Gender.HasValue ? (int)runner.Gender.Value : "NULL")}',
+'{MySqlHelper.EscapeString(runner.Comment)}');";
 
                 var response = await QuerySqlAsync(sql);
 

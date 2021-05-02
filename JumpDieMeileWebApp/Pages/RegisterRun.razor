@@ -4,7 +4,7 @@
     }
 </style>
 
-<div class="@(this.RunRegistered ? "display-none" : "")" style="width: 360px;">
+<div class="@(this.RunRegistered ? "display-none" : "")" style="min-width: 325px; width: 50%;">
     <MudForm @ref="this.CurrentForm">
         <MudCard Outlined="true" Elevation="4">
             <MudCardHeader>
@@ -33,7 +33,7 @@
     </MudForm>
 </div>
 
-<div class="@(!this.RunRegistered ? "display-none" : "")" style="width: 360px;">
+<div class="@(!this.RunRegistered ? "display-none" : "")" style="min-width: 325px; width: 50%;">
     
     <MudCard Outlined="true" Elevation="4">
         <MudCardHeader>
