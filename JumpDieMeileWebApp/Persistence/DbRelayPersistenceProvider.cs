@@ -77,7 +77,9 @@
             var sql = $"SELECT * FROM {RunnerTableName}";
             var queryResult = await QuerySqlAsync(sql);
 
-            var list = JsonSerializer.Deserialize<List<Runner>>(queryResult);
+            var list = JsonSerializer.Deserialize<List<Runner>>(
+                queryResult,
+                new JsonSerializerOptions { Converters = { new StringDeserializeJsonConverter() } });
             if (list != null)
             {
                 this.lastFetchedRunners = list;
@@ -143,7 +145,7 @@
 
             var list = JsonSerializer.Deserialize<List<Run>>(
                 queryResult,
-                new JsonSerializerOptions { Converters = { converter, new TimeSpanDeserializeJsonConverter() } });
+                new JsonSerializerOptions { Converters = { converter, new TimeSpanDeserializeJsonConverter(), new StringDeserializeJsonConverter() } });
             if (list != null)
             {
                 this.lastFetchedRuns = list;
@@ -232,6 +234,45 @@
         {
             throw new NotImplementedException();
         }
+        //writer.WriteStringValue(dateTimeValue.ToString(
+        //    "MM/dd/yyyy", CultureInfo.InvariantCulture));
+    }
+
+    public class StringDeserializeJsonConverter : JsonConverter<string?>
+    {
+        public override string? Read(
+            ref Utf8JsonReader reader,
+            Type typeToConvert,
+            JsonSerializerOptions options)
+        {
+            if (reader.TokenType == JsonTokenType.Number)
+            {
+                var value = reader.GetInt32();
+                return value.ToString();
+            }
+
+            if (reader.TokenType == JsonTokenType.String)
+            {
+                return reader.GetString();
+            }
+
+            if (reader.TokenType == JsonTokenType.True)
+            {
+                return "true";
+            }
+
+            if (reader.TokenType == JsonTokenType.False)
+            {
+                return "false";
+            }
+
+            throw new JsonException();
+        }
+
+        public override void Write(
+            Utf8JsonWriter writer,
+            string? dateTimeValue,
+            JsonSerializerOptions options) => throw new NotImplementedException();
         //writer.WriteStringValue(dateTimeValue.ToString(
         //    "MM/dd/yyyy", CultureInfo.InvariantCulture));
     }
