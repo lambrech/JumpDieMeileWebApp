@@ -76,9 +76,17 @@
                     (decimal)this.Distance.Value,
                     localTime.ToUniversalTime(),
                     TryGetDurationTimespan(this.DurationInMinutes));
-                await this.PersistenceProvider.PersistRun(this.RegisteredRun);
-                this.RunRegistered = true;
-                this.StateHasChanged();
+                var result = await this.PersistenceProvider.PersistRun(this.RegisteredRun);
+
+                if (result.Success)
+                {
+                    this.RunRegistered = true;
+                    this.StateHasChanged();
+                }
+                else
+                {
+                    Console.WriteLine("Saving failed");
+                }
             }
         }
 
