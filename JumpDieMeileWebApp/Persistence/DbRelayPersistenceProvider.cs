@@ -101,13 +101,11 @@
 {run.ModelVersion},
 '{MySqlHelper.EscapeString(JsonSerializer.Serialize(run.CreationTimestampUtc).Trim('\"'))}',
 '{MySqlHelper.EscapeString(run.Runner.Id.ToString())}',
-{run.DistanceKm},
+{run.DistanceKm.ToString(CultureInfo.InvariantCulture)},
 '{MySqlHelper.EscapeString(JsonSerializer.Serialize(run.StartTimestampUtc).Trim('\"'))}',
 {run.Duration?.Ticks.ToString(CultureInfo.InvariantCulture) ?? "NULL"});";
 
-                Console.WriteLine(sql);
 				var response = await QuerySqlAsync(sql);
-				Console.WriteLine(response);
 
                 if (response.Contains("Query completed successfully"))
                 {
