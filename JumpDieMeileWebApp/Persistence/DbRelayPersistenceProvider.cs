@@ -105,7 +105,9 @@
 '{MySqlHelper.EscapeString(JsonSerializer.Serialize(run.StartTimestampUtc).Trim('\"'))}',
 {run.Duration?.Ticks.ToString(CultureInfo.InvariantCulture) ?? "NULL"});";
 
-                var response = await QuerySqlAsync(sql);
+                Console.WriteLine(sql);
+				var response = await QuerySqlAsync(sql);
+				Console.WriteLine(response);
 
                 if (response.Contains("Query completed successfully"))
                 {
