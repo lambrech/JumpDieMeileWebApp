@@ -38,8 +38,11 @@ namespace JumpDieMeileWebApp
  * Work to do:
  * Performance when loading ~10000 rows
  * On saving handling / On loading handling
+ * Fail saving loading handling
  *
  * After register pages
  *
  * Initial load animation
+ *
+ * security issue all data visible in post
  */

@@ -44,6 +44,8 @@
         
         private OwnMudTimePicker CurrentTimePicker { get; set; } = null!;
 
+        private string SaveFailedErrorText { get; set; } = string.Empty;
+
         protected override async Task OnInitializedAsync()
         {
             this.CurrentForm = new MudForm();
@@ -80,12 +82,17 @@
 
                 if (result.Success)
                 {
+                    this.SaveFailedErrorText = string.Empty;
                     this.RunRegistered = true;
+
+                    // reset the form to reduce possibility of double entry
+                    this.CurrentForm.Reset();
                     this.StateHasChanged();
                 }
                 else
                 {
                     Console.WriteLine("Saving failed");
+                    this.SaveFailedErrorText = RegisterRunner.SaveErrorText;
                 }
             }
         }

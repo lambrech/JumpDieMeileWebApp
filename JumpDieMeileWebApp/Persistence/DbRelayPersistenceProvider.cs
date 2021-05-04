@@ -129,8 +129,10 @@
         {
             var sqlCount = $"SELECT Count(*) as `count` FROM {RunTableName}";
             var queryResultCount = await QuerySqlAsync(sqlCount);
+            Console.WriteLine($"[{DateTime.Now}]: Got count");
 
             var currentCount = JsonSerializerExtensions.DeserializeAnonymousType(queryResultCount.Trim().TrimStart('[').TrimEnd(']'), new { count = 0 })?.count;
+            Console.WriteLine($"[{DateTime.Now}]: Deserialized count");
 
             if (currentCount == this.lastFetchedRunners.Count)
             {
@@ -139,13 +141,19 @@
 
             var sql = $"SELECT * FROM {RunTableName}";
             var queryResult = await QuerySqlAsync(sql);
+            Console.WriteLine($"[{DateTime.Now}]: Got runs");
 
             var currentRunners = await this.GetAllPersistedRunners();
+            Console.WriteLine($"[{DateTime.Now}]: Got all deserialized runners");
+
+
             var converter = new RunnerDeserializeJsonConverter(currentRunners);
 
             var list = JsonSerializer.Deserialize<List<Run>>(
                 queryResult,
                 new JsonSerializerOptions { Converters = { converter, new TimeSpanDeserializeJsonConverter(), new StringDeserializeJsonConverter() } });
+
+            Console.WriteLine($"[{DateTime.Now}]: Got all deserialized runs");
             if (list != null)
             {
                 this.lastFetchedRuns = list;

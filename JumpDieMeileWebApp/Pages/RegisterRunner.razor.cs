@@ -14,6 +14,7 @@
     [Route(PageRoutes.RegisterRunnerRoute)]
     public partial class RegisterRunner
     {
+        public static string SaveErrorText = @"Leider ist das speichern deines Eintrags unerwartet fehlgeschlagen. Du kannst es nochmal probieren - aber du darfst auch gerne eine Mail an 'edv@cvjmbaden.de' schreiben.";
         private IList<Runner> allPersistedRunners = new List<Runner>();
 
         [Inject]
@@ -29,6 +30,8 @@
         private Runner? RegisteredRunner { get; set; }
 
         private EditContext CurrentEditContext { get; set; } = null!;
+
+        private string SaveFailedErrorText { get; set; } = string.Empty;
 
         protected override async Task OnInitializedAsync()
         {
@@ -52,11 +55,21 @@
                 return;
             }
 
-            await this.PersistenceProvider.PersistRunner(this.NewRunner);
-            this.RegistrationDone = true;
-            this.RegisteredRunner = this.NewRunner;
-            this.NewRunner = new Runner();
-            this.StateHasChanged();
+            var result = await this.PersistenceProvider.PersistRunner(this.NewRunner);
+
+            if (result.Success)
+            {
+                this.SaveFailedErrorText = string.Empty;
+                this.RegistrationDone = true;
+                this.RegisteredRunner = this.NewRunner;
+                this.NewRunner = new Runner();
+                this.StateHasChanged();
+            }
+            else
+            {
+                Console.WriteLine("Saving failed");
+                this.SaveFailedErrorText = SaveErrorText;
+            }
         }
 
         private async Task ReloadPersistedRunnersAndValidateUserName()
