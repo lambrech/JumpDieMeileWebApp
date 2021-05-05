@@ -6,8 +6,7 @@
 </style>
 
 <div class="@(this.RegistrationDone ? "display-none" : "")" style="min-width: 325px; width: 50%;">
-    <EditForm EditContext="@this.CurrentEditContext"  OnValidSubmit="this.HandleValidSubmit">
-        <DataAnnotationsValidator />
+    <MudForm @ref="this.CurrentForm">
         <MudCard Outlined="true" Elevation="4">
             <MudCardHeader>
                 <CardHeaderContent>
@@ -36,24 +35,26 @@
                 
                 @if (this.NewSponsoringEntry.SponsoringMode == SponsoringMode.SingleRunner)
                 {
-                    <MudAutocomplete Class="my-2" Label="Läufer" @bind-Value="this.NewSponsoringEntry.SponsoredRunner" For="(() => this.NewSponsoringEntry.SponsoredRunner)" SearchFunc="this.RunnerSearchFunc"
-                                     ResetValueOnEmptyText="true" CoerceText="true" MinCharacters="3" MaxItems="null" Immediate="true" Variant="Variant.Outlined" Error="true"
-                                     ToStringFunc="@(runner => { return runner?.FullDisplayName ?? string.Empty; })" ErrorText="@this.CurrentRunnerErrorText()"
+                    <MudAutocomplete Class="my-2" Label="Läufer" @bind-Value="this.NewSponsoringEntry.SponsoredRunner" SearchFunc="this.RunnerSearchFunc"
+                                     Validation="@(this.ValidateProp<Runner?>(nameof(this.NewSponsoringEntry.SponsoredRunner)))"
+                                     ResetValueOnEmptyText="true" CoerceText="true" MinCharacters="3" MaxItems="null" Immediate="true" Variant="Variant.Outlined"
+                                     ToStringFunc="@(runner => { return runner?.FullDisplayName ?? string.Empty; })"
                                      HelperText="Beginne den Nutzernamen des Läufers einzugeben, du bekommst dann eine Auswahl angezeigt um den Läufer auszuwählen."/>
                 }
                 
-                <MudNumericField Class="my-2" Label="Pauschaler Spendenbetrag" @bind-Value="this.NewSponsoringEntry.ImmediateInEuro"  Variant="Variant.Outlined" 
-                                 For="(() => this.NewSponsoringEntry.ImmediateInEuro)" Adornment="Adornment.End" AdornmentText="€" Immediate="true" />
+                <MudNumericField Class="my-2" Label="Pauschaler Spendenbetrag" @bind-Value="this.NewSponsoringEntry.ImmediateInEuro"  Variant="Variant.Outlined"
+                                 Validation="@(this.ValidateProp<decimal?>(nameof(this.NewSponsoringEntry.ImmediateInEuro)))"
+                                 Adornment="Adornment.End" AdornmentText="€" Immediate="true" />
                 
                 <MudNumericField Class="my-2" Label="Spende pro gelaufenem km" @bind-Value="this.NewSponsoringEntry.PerKmInEuro"  Variant="Variant.Outlined"
-                                 For="(() => this.NewSponsoringEntry.PerKmInEuro)" Adornment="Adornment.End" AdornmentText="€"
+                                 Adornment="Adornment.End" AdornmentText="€" Validation="@(this.ValidateProp<decimal?>(nameof(this.NewSponsoringEntry.PerKmInEuro)))"
                                  HelperText="Der Wert gilt in € pro gelaufenem km. Beispiel: '1,5'" Immediate="true" />
             </MudCardContent>
             <MudCardActions>
-                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Outlined" Color="Color.Primary" Class="ml-auto ma-2">Hinzufügen</MudButton>
+                <MudButton OnClick="@this.HandleValidSubmit" Variant="Variant.Outlined" Color="Color.Primary" Class="ml-auto ma-2">Hinzufügen</MudButton>
             </MudCardActions>
         </MudCard>
-    </EditForm>
+    </MudForm>
 </div>
 
 <MudPaper Class="@((string.IsNullOrWhiteSpace(this.SaveFailedErrorText) ? "display-none" : "") + "pa-2")">

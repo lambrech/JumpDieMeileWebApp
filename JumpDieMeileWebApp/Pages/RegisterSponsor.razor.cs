@@ -10,6 +10,7 @@
     using JumpDieMeileWebApp.Persistence;
     using Microsoft.AspNetCore.Components;
     using Microsoft.AspNetCore.Components.Forms;
+    using MudBlazor;
 
     [Route(PageRoutes.RegisterSponsorRoute)]
     public partial class RegisterSponsor
@@ -22,13 +23,29 @@
         [Inject]
         public NavigationManager NavigationManager { get; private set; } = null!;
 
-        private SponsoringEntry NewSponsoringEntry { get; set; } = new();
+        private SponsoringEntry newSponsoringEntry = new();
+
+        private SponsoringEntry NewSponsoringEntry
+        {
+            get => this.newSponsoringEntry;
+
+            set
+            {
+                if (this.newSponsoringEntry == value)
+                {
+                    return;
+                }
+
+                this.newSponsoringEntry = value;
+                this.SetValue(SponsoringEntry.InstanceToValidateHelperKey, this.newSponsoringEntry);
+            }
+        }
 
         private bool RegistrationDone { get; set; }
 
         private SponsoringEntry? RegisteredSponsoringEntry { get; set; }
 
-        private EditContext CurrentEditContext { get; set; } = null!;
+        private MudForm CurrentForm { get; set; } = null!;
 
         private string SaveFailedErrorText { get; set; } = string.Empty;
 
@@ -37,7 +54,7 @@
             this.RegisteredSponsoringEntry = null;
             this.RegistrationDone = false;
             this.NewSponsoringEntry = new SponsoringEntry();
-            this.CurrentEditContext = new EditContext(this.NewSponsoringEntry);
+            this.CurrentForm = new MudForm();
             await this.ReloadPersistedRunners();
             await base.OnInitializedAsync();
         }
@@ -49,6 +66,12 @@
 
         private async Task HandleValidSubmit()
         {
+            this.CurrentForm.Validate();
+            if (!this.CurrentForm.IsValid)
+            {
+                return;
+            }
+
             var list = new List<ValidationResult>();
             var isValid = Validator.TryValidateObject(this.NewSponsoringEntry, new ValidationContext(this.NewSponsoringEntry), list, true);
 
@@ -84,6 +107,19 @@
             var res = new List<ValidationResult>();
             Validator.TryValidateProperty(this.NewSponsoringEntry.SponsoredRunner, new ValidationContext(this.NewSponsoringEntry) { MemberName = nameof(SponsoringEntry.SponsoredRunner) }, res);
             return res.FirstOrDefault()?.ErrorMessage;
+        }
+
+        private Func<T, string?> ValidateProp<T>(string propName)
+        {
+            return val =>
+            {
+                var res = new List<ValidationResult>();
+                Validator.TryValidateProperty(
+                    val,
+                    new ValidationContext(this.NewSponsoringEntry) { MemberName = propName },
+                    res);
+                return res.FirstOrDefault()?.ErrorMessage;
+            };
         }
     }
 }
