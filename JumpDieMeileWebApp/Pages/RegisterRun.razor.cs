@@ -99,12 +99,15 @@
 
         private async Task ReloadPersistedRunners()
         {
-            Console.WriteLine($"[{DateTime.Now}]: Reloading runners from db");
             this.allPersistedRunners = await this.PersistenceProvider.GetAllPersistedRunners();
-            Console.WriteLine($"[{DateTime.Now}]: Finished reload");
         }
 
         private async Task<IEnumerable<Runner?>> RunnerSearchFunc(string? arg)
+        {
+            return await GetMatchingRunners(arg, this.allPersistedRunners);
+        }
+
+        public static async Task<IEnumerable<Runner?>> GetMatchingRunners(string? arg, IList<Runner> runners)
         {
             if ((arg == null) || (arg.Length < 3))
             {
@@ -112,9 +115,9 @@
             }
 
             await Task.Delay(50);
-            var matches = this.allPersistedRunners
-                              .Where(x => x.FullDisplayName.ToLower(CultureInfo.CurrentCulture).Contains(arg.ToLower(CultureInfo.CurrentCulture)))
-                              .ToList();
+            var matches = runners
+                         .Where(x => x.FullDisplayName.ToLower(CultureInfo.CurrentCulture).Contains(arg.ToLower(CultureInfo.CurrentCulture)))
+                         .ToList();
 
             return matches;
         }

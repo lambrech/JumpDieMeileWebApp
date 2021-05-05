@@ -33,7 +33,7 @@
     </MudForm>
 </div>
 
-<MudPaper Class="pa-2">
+<MudPaper Class="@((string.IsNullOrWhiteSpace(this.SaveFailedErrorText) ? "display-none" : "") + "pa-2")">
     <MudText Color="Color.Secondary" Typo="Typo.h6">@this.SaveFailedErrorText</MudText>
 </MudPaper>
 

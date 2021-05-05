@@ -12,6 +12,8 @@
 
         private readonly List<Run> persistedRuns = new ();
 
+        private readonly List<SponsoringEntry> sponsoringEntries = new ();
+
         public async Task<PersistResult> PersistRunner(Runner runner)
         {
             await Task.Delay(0);
@@ -42,21 +44,34 @@
 
         public async Task<IList<Runner>> GetAllPersistedRunners()
         {
-            await Task.Delay(3000);
+            await Task.Delay(0);
             return this.persistedRunners;
         }
 
         public async Task<PersistResult> PersistRun(Run run)
         {
-            await Task.Delay(2000);
+            await Task.Delay(0);
             this.persistedRuns.Add(run);
             return new PersistResultSuccess();
         }
 
         public async Task<IList<Run>> GetAllPersistedRuns()
         {
-            await Task.Delay(3000);
+            await Task.Delay(0);
             return this.persistedRuns;
+        }
+
+        public async Task<PersistResult> PersistSponsoringEntry(SponsoringEntry sponsoringEntry)
+        {
+            await Task.Delay(0);
+            this.sponsoringEntries.Add(sponsoringEntry);
+            return new PersistResultSuccess();
+        }
+
+        public async Task<IList<SponsoringEntry>> GetAllPersistedSponsoringEntries()
+        {
+            await Task.Delay(0);
+            return this.sponsoringEntries;
         }
     }
 }

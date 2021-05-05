@@ -13,5 +13,9 @@
         Task<PersistResult> PersistRun(Run run);
 
         Task<IList<Run>> GetAllPersistedRuns();
+
+        Task<PersistResult> PersistSponsoringEntry(SponsoringEntry sponsoringEntry);
+
+        Task<IList<SponsoringEntry>> GetAllPersistedSponsoringEntries();
     }
 }

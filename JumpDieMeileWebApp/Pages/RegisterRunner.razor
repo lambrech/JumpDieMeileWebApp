@@ -11,7 +11,7 @@
         <MudCard Outlined="true" Elevation="4">
             <MudCardHeader>
                 <CardHeaderContent>
-                    <MudText Typo="Typo.h6">Neuen Läufer anmelden</MudText>
+                    <MudText Typo="Typo.h6">Neuen Läufer registrieren</MudText>
                 </CardHeaderContent>
             </MudCardHeader>
             <MudCardContent>
@@ -23,7 +23,7 @@
                 <MudTextField id="location" Class="my-2" Label="Wohnort" @bind-Value="this.NewRunner.Location" For="@(() => this.NewRunner.Location)" Variant="Variant.Outlined"/>
                 <MudTextField id="postcode" Class="my-2" Label="PLZ" @bind-Value="this.NewRunner.Postcode" For="@(() => this.NewRunner.Postcode)" Variant="Variant.Outlined"/>
                 <MudTextField id="streetAndNumber" Class="my-2" Label="Straße und Hausnummer" @bind-Value="this.NewRunner.StreetHouseNr" For="@(() => this.NewRunner.StreetHouseNr)" Variant="Variant.Outlined"/>
-                <MudSelect id="gender" Class="my-2" Label="Geschlecht" @bind-Value="this.NewRunner.Gender" For="@(() => this.NewRunner.Gender)"  Variant="Variant.Outlined" >
+                <MudSelect id="gender" Label="Geschlecht" @bind-Value="this.NewRunner.Gender" For="@(() => this.NewRunner.Gender)"  Variant="Variant.Outlined" >
                     <MudSelectItem Value="@((Gender?)Gender.Male)" >@DisplayExtensions.ToDisplayString(Gender.Male)</MudSelectItem>
                     <MudSelectItem Value="@((Gender?)Gender.Female)" >@DisplayExtensions.ToDisplayString(Gender.Female)</MudSelectItem>
                     <MudSelectItem Value="@((Gender?)Gender.Divers)" >@DisplayExtensions.ToDisplayString(Gender.Divers)</MudSelectItem>
@@ -37,7 +37,7 @@
     </EditForm>
 </div>
 
-<MudPaper Class="pa-2">
+<MudPaper Class="@((string.IsNullOrWhiteSpace(this.SaveFailedErrorText) ? "display-none" : "") + "pa-2")">
     <MudText Color="Color.Secondary" Typo="Typo.h6">@this.SaveFailedErrorText</MudText>
 </MudPaper>
 
@@ -57,10 +57,10 @@
             <MudTextField ReadOnly="true" Class="my-4" Label="Nachname" Value="this.RegisteredRunner?.LastName"  Variant="Variant.Outlined"/>
             <MudTextField ReadOnly="true" Class="my-4" Label="Nutzername" Value="this.RegisteredRunner?.Username" Variant="Variant.Outlined" />
             <MudTextField ReadOnly="true" Class="my-4" Label="Email" Value="this.RegisteredRunner?.Email" Variant="Variant.Outlined"/>
-            <MudTextField ReadOnly="true" Class="my-4" Label="Email" Value="this.RegisteredRunner?.Location" Variant="Variant.Outlined"/>
-            <MudTextField ReadOnly="true" Class="my-4" Label="Email" Value="this.RegisteredRunner?.Postcode" Variant="Variant.Outlined"/>
-            <MudTextField ReadOnly="true" Class="my-4" Label="Email" Value="this.RegisteredRunner?.StreetHouseNr" Variant="Variant.Outlined"/>
-            <MudTextField ReadOnly="true" Class="my-4" Label="Email" Value="this.RegisteredRunner?.Gender.ToDisplayString()" Variant="Variant.Outlined"/>
+            <MudTextField ReadOnly="true" Class="my-4" Label="Wohnort" Value="this.RegisteredRunner?.Location" Variant="Variant.Outlined"/>
+            <MudTextField ReadOnly="true" Class="my-4" Label="PLZ" Value="this.RegisteredRunner?.Postcode" Variant="Variant.Outlined"/>
+            <MudTextField ReadOnly="true" Class="my-4" Label="Straße und Hausnummer" Value="this.RegisteredRunner?.StreetHouseNr" Variant="Variant.Outlined"/>
+            <MudTextField ReadOnly="true" Class="my-4" Label="Geschlecht" Value="this.RegisteredRunner?.Gender.ToDisplayString()" Variant="Variant.Outlined"/>
             @if (!string.IsNullOrWhiteSpace(this.RegisteredRunner?.Comment))
             {
                 <MudTextField ReadOnly="true" Class="my-4" Label="Anmerkung" Value="this.RegisteredRunner?.Comment" Variant="Variant.Outlined"/>
@@ -68,7 +68,7 @@
             
         </MudCardContent>
         <MudCardActions>
-            <MudButton  Class="ma-4" OnClick="@(async () => { await this.OnInitializedAsync(); this.StateHasChanged(); })" Variant="Variant.Outlined">Weiteren Läufer melden</MudButton>
+            <MudButton  Class="ma-4" OnClick="@(async () => { await this.OnInitializedAsync(); this.StateHasChanged(); })" Variant="Variant.Outlined">Weiteren Läufer registrieren</MudButton>
             <MudButton  Class="ma-4" OnClick="@(async () => { this.NavigationManager.NavigateTo(this.NavigationManager.CreateRoute(PageRoutes.RegisterRunRoute)); })"
                        Variant="Variant.Outlined">Einen Lauf eintragen</MudButton>
         </MudCardActions>

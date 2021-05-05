@@ -1,0 +1,105 @@
+﻿@using JumpDieMeileWebApp.Models
+<style>
+    .display-none {
+        display: none;
+    }
+</style>
+
+<div class="@(this.RegistrationDone ? "display-none" : "")" style="min-width: 325px; width: 50%;">
+    <EditForm EditContext="@this.CurrentEditContext"  OnValidSubmit="this.HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <MudCard Outlined="true" Elevation="4">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">Neuen Sponsoring Eintrag hinzufügen</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudText Class="mt-4 mb-2">Kontaktinformationen des Sponsors:</MudText>
+                <MudTextField id="firstName" Class="my-2" Label="Vorname" @bind-Value="this.NewSponsoringEntry.FirstName" For="@(() => this.NewSponsoringEntry.FirstName)" Variant="Variant.Outlined"/>
+                <MudTextField id="lastName" Class="my-2" Label="Nachname" @bind-Value="this.NewSponsoringEntry.LastName" For="@(() => this.NewSponsoringEntry.LastName)" Variant="Variant.Outlined"/>
+                <MudTextField id="email" Class="my-2" Label="Email" @bind-Value="this.NewSponsoringEntry.Email" For="@(() => this.NewSponsoringEntry.Email)" Variant="Variant.Outlined"/>
+                <MudTextField id="location" Class="my-2" Label="Wohnort" @bind-Value="this.NewSponsoringEntry.Location" For="@(() => this.NewSponsoringEntry.Location)" Variant="Variant.Outlined"/>
+                <MudTextField id="postcode" Class="my-2" Label="PLZ" @bind-Value="this.NewSponsoringEntry.Postcode" For="@(() => this.NewSponsoringEntry.Postcode)" Variant="Variant.Outlined"/>
+                <MudTextField id="streetAndNumber" Class="my-2" Label="Straße und Hausnummer" @bind-Value="this.NewSponsoringEntry.StreetHouseNr" For="@(() => this.NewSponsoringEntry.StreetHouseNr)" Variant="Variant.Outlined"/>
+                <MudSelect id="gender" Label="Geschlecht" @bind-Value="this.NewSponsoringEntry.Gender" For="@(() => this.NewSponsoringEntry.Gender)" Variant="Variant.Outlined">
+                    <MudSelectItem Value="@((Gender?)Gender.Male)">@DisplayExtensions.ToDisplayString(Gender.Male)</MudSelectItem>
+                    <MudSelectItem Value="@((Gender?)Gender.Female)">@DisplayExtensions.ToDisplayString(Gender.Female)</MudSelectItem>
+                    <MudSelectItem Value="@((Gender?)Gender.Divers)">@DisplayExtensions.ToDisplayString(Gender.Divers)</MudSelectItem>
+                </MudSelect>
+                
+                <MudText Class="mt-4 mb-2">Sponsoring Angaben:</MudText>
+                <MudSelect id="sponsoringMode" Label="Unterstützungs-Modus" @bind-Value="this.NewSponsoringEntry.SponsoringMode" For="@(() => this.NewSponsoringEntry.SponsoringMode)" Variant="Variant.Outlined">
+                    <MudSelectItem Value="@((SponsoringMode?)SponsoringMode.SingleRunner)">@DisplayExtensions.ToDisplayString(SponsoringMode.SingleRunner)</MudSelectItem>
+                    <MudSelectItem Value="@((SponsoringMode?)SponsoringMode.WholeProject)">@DisplayExtensions.ToDisplayString(SponsoringMode.WholeProject)</MudSelectItem>
+                </MudSelect>
+                
+                @if (this.NewSponsoringEntry.SponsoringMode == SponsoringMode.SingleRunner)
+                {
+                    <MudAutocomplete Class="my-2" Label="Läufer" @bind-Value="this.NewSponsoringEntry.SponsoredRunner" For="(() => this.NewSponsoringEntry.SponsoredRunner)" SearchFunc="this.RunnerSearchFunc"
+                                     ResetValueOnEmptyText="true" CoerceText="true" MinCharacters="3" MaxItems="null" Immediate="true" Variant="Variant.Outlined" Error="true"
+                                     ToStringFunc="@(runner => { return runner?.FullDisplayName ?? string.Empty; })" ErrorText="@this.CurrentRunnerErrorText()"
+                                     HelperText="Beginne den Nutzernamen des Läufers einzugeben, du bekommst dann eine Auswahl angezeigt um den Läufer auszuwählen."/>
+                }
+                
+                <MudNumericField Class="my-2" Label="Pauschaler Spendenbetrag" @bind-Value="this.NewSponsoringEntry.ImmediateInEuro"  Variant="Variant.Outlined" 
+                                 For="(() => this.NewSponsoringEntry.ImmediateInEuro)" Adornment="Adornment.End" AdornmentText="€" Immediate="true" />
+                
+                <MudNumericField Class="my-2" Label="Spende pro gelaufenem km" @bind-Value="this.NewSponsoringEntry.PerKmInEuro"  Variant="Variant.Outlined"
+                                 For="(() => this.NewSponsoringEntry.PerKmInEuro)" Adornment="Adornment.End" AdornmentText="€"
+                                 HelperText="Der Wert gilt in € pro gelaufenem km. Beispiel: '1,5'" Immediate="true" />
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Outlined" Color="Color.Primary" Class="ml-auto ma-2">Hinzufügen</MudButton>
+            </MudCardActions>
+        </MudCard>
+    </EditForm>
+</div>
+
+<MudPaper Class="@((string.IsNullOrWhiteSpace(this.SaveFailedErrorText) ? "display-none" : "") + "pa-2")">
+    <MudText Color="Color.Secondary" Typo="Typo.h6">@this.SaveFailedErrorText</MudText>
+</MudPaper>
+
+
+<div class="@(!this.RegistrationDone ? "display-none" : "")" style="min-width: 325px; width: 50%;">
+    
+    <MudCard Outlined="true" Elevation="4">
+        <MudCardHeader>
+            <CardHeaderContent>
+                <MudText Typo="Typo.h6">Danke für die Unterstützung.</MudText>
+            </CardHeaderContent>
+        </MudCardHeader>
+        <MudCardContent>
+            <MudTextField ReadOnly="true" Class="my-4" Label="Vorname" Value="this.RegisteredSponsoringEntry?.FirstName"  Variant="Variant.Outlined"/>
+            <MudTextField ReadOnly="true" Class="my-4" Label="Nachname" Value="this.RegisteredSponsoringEntry?.LastName"  Variant="Variant.Outlined"/>
+            <MudTextField ReadOnly="true" Class="my-4" Label="Email" Value="this.RegisteredSponsoringEntry?.Email" Variant="Variant.Outlined"/>
+            <MudTextField ReadOnly="true" Class="my-4" Label="Wohnort" Value="this.RegisteredSponsoringEntry?.Location" Variant="Variant.Outlined"/>
+            <MudTextField ReadOnly="true" Class="my-4" Label="PLZ" Value="this.RegisteredSponsoringEntry?.Postcode" Variant="Variant.Outlined"/>
+            <MudTextField ReadOnly="true" Class="my-4" Label="Straße und Hausnummer" Value="this.RegisteredSponsoringEntry?.StreetHouseNr" Variant="Variant.Outlined"/>
+            <MudTextField ReadOnly="true" Class="my-4" Label="Geschlecht" Value="this.RegisteredSponsoringEntry?.Gender.ToDisplayString()" Variant="Variant.Outlined"/>
+            <MudTextField ReadOnly="true" Class="my-4" Label="Unterstützungs-Modus" Value="this.RegisteredSponsoringEntry?.SponsoringMode.ToDisplayString()" Variant="Variant.Outlined"/>
+            
+            @if (this.RegisteredSponsoringEntry?.SponsoredRunner != null)
+            {
+                <MudTextField ReadOnly="true" Class="my-4" Label="Läufer Anzeigename" Value="this.RegisteredSponsoringEntry?.SponsoredRunner.FullDisplayName"  Variant="Variant.Outlined"/>
+            }
+            @if (this.RegisteredSponsoringEntry is {ImmediateInEuro: { } })
+            {
+                <MudTextField ReadOnly="true" Class="my-4" Label="Pauschaler Spendenbetrag" Value="@($"{this.RegisteredSponsoringEntry.ImmediateInEuro.Value} €")"  Variant="Variant.Outlined"/>
+            }
+            @if (this.RegisteredSponsoringEntry is {PerKmInEuro: { } })
+            {
+                <MudTextField ReadOnly="true" Class="my-4" Label="Spende pro gelaufenem km" Value="@($"{this.RegisteredSponsoringEntry.PerKmInEuro.Value} €")"  Variant="Variant.Outlined"/>
+            }
+
+        </MudCardContent>
+        <MudCardActions>
+            <MudButton  Class="ma-4" OnClick="@(async () => { this.NavigationManager.NavigateTo(this.NavigationManager.CreateRoute(PageRoutes.RegisterRunRoute)); })"
+                        Variant="Variant.Outlined">Einen Lauf eintragen</MudButton>
+            <MudButton Class="ma-4" OnClick="@(async () => { this.NavigationManager.NavigateTo(this.NavigationManager.CreateRoute(PageRoutes.RegisterRunnerRoute)); })"
+                       Variant="Variant.Outlined">Läufer registrieren</MudButton>
+            <MudButton Class="ma-4" OnClick="@(async () => { await this.OnInitializedAsync(); this.StateHasChanged(); })" Variant="Variant.Outlined">Weiteren Sponsoring Eintrag hinzufügen</MudButton>
+        </MudCardActions>
+    </MudCard>
+    
+</div>

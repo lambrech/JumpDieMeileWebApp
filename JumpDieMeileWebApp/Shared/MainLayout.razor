@@ -36,6 +36,10 @@
             <MudButton OnClick="@(() => { this.NavigationManager.NavigateTo(this.NavigationManager.CreateRoute(PageRoutes.RegisterRunnerRoute)); })"
                        Color="Color.Secondary" Variant="Variant.Filled">Läufer registrieren</MudButton>
         </MudPaper>
+        <MudPaper Class="ma-4">
+            <MudButton OnClick="@(() => { this.NavigationManager.NavigateTo(this.NavigationManager.CreateRoute(PageRoutes.RegisterSponsorRoute)); })"
+                       Color="Color.Secondary" Variant="Variant.Filled">Sponsoring hinzufügen</MudButton>
+        </MudPaper>
     </div>
 
     <div class="horizontal-wrap-panel-center ma-4">

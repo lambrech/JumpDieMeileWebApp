@@ -165,6 +165,16 @@
 #pragma warning restore CA2201 // Do not raise reserved exception types
         }
 
+        public async Task<PersistResult> PersistSponsoringEntry(SponsoringEntry sponsoringEntry)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IList<SponsoringEntry>> GetAllPersistedSponsoringEntries()
+        {
+            throw new NotImplementedException();
+        }
+
         private static async Task<string> QuerySqlAsync(string sql)
         {
             using var client = new HttpClient();

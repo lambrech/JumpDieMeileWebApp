@@ -11,10 +11,9 @@
     using Microsoft.AspNetCore.Components;
     using Microsoft.AspNetCore.Components.Forms;
 
-    [Route(PageRoutes.RegisterRunnerRoute)]
-    public partial class RegisterRunner
+    [Route(PageRoutes.RegisterSponsorRoute)]
+    public partial class RegisterSponsor
     {
-        public static string SaveErrorText = @"Leider ist das speichern deines Eintrags unerwartet fehlgeschlagen. Du kannst es nochmal probieren - aber du darfst auch gerne eine Mail an 'edv@cvjmbaden.de' schreiben.";
         private IList<Runner> allPersistedRunners = new List<Runner>();
 
         [Inject]
@@ -23,11 +22,11 @@
         [Inject]
         public NavigationManager NavigationManager { get; private set; } = null!;
 
-        private Runner NewRunner { get; set; } = new();
+        private SponsoringEntry NewSponsoringEntry { get; set; } = new();
 
         private bool RegistrationDone { get; set; }
 
-        private Runner? RegisteredRunner { get; set; }
+        private SponsoringEntry? RegisteredSponsoringEntry { get; set; }
 
         private EditContext CurrentEditContext { get; set; } = null!;
 
@@ -35,54 +34,55 @@
 
         protected override async Task OnInitializedAsync()
         {
-            this.RegisteredRunner = null;
+            this.RegisteredSponsoringEntry = null;
             this.RegistrationDone = false;
-            this.NewRunner = new Runner();
-            this.CurrentEditContext = new EditContext(this.NewRunner);
-            await this.ReloadPersistedRunnersAndValidateUserName();
+            this.NewSponsoringEntry = new SponsoringEntry();
+            this.CurrentEditContext = new EditContext(this.NewSponsoringEntry);
+            await this.ReloadPersistedRunners();
             await base.OnInitializedAsync();
+        }
+
+        private async Task ReloadPersistedRunners()
+        {
+            this.allPersistedRunners = await this.PersistenceProvider.GetAllPersistedRunners();
         }
 
         private async Task HandleValidSubmit()
         {
-            await this.ReloadPersistedRunnersAndValidateUserName();
-
             var list = new List<ValidationResult>();
-            var isValid = Validator.TryValidateObject(this.NewRunner, new ValidationContext(this.NewRunner), list, true);
+            var isValid = Validator.TryValidateObject(this.NewSponsoringEntry, new ValidationContext(this.NewSponsoringEntry), list, true);
 
             if (!isValid)
             {
                 return;
             }
 
-            var result = await this.PersistenceProvider.PersistRunner(this.NewRunner);
+            var result = await this.PersistenceProvider.PersistSponsoringEntry(this.NewSponsoringEntry);
 
             if (result.Success)
             {
                 this.SaveFailedErrorText = string.Empty;
                 this.RegistrationDone = true;
-                this.RegisteredRunner = this.NewRunner;
-                this.NewRunner = new Runner();
+                this.RegisteredSponsoringEntry = this.NewSponsoringEntry;
+                this.NewSponsoringEntry = new SponsoringEntry();
                 this.StateHasChanged();
             }
             else
             {
                 Console.WriteLine("Saving failed");
-                this.SaveFailedErrorText = SaveErrorText;
+                this.SaveFailedErrorText = RegisterRunner.SaveErrorText;
             }
         }
 
-        private async Task ReloadPersistedRunnersAndValidateUserName()
+        private async Task<IEnumerable<Runner?>> RunnerSearchFunc(string? arg)
         {
-            this.allPersistedRunners = await this.PersistenceProvider.GetAllPersistedRunners();
-            this.NewRunner.SetValue(Runner.OtherRunnersHelperKey, this.allPersistedRunners);
-            this.CurrentEditContext?.NotifyValidationStateChanged();
+            return await RegisterRun.GetMatchingRunners(arg, this.allPersistedRunners);
         }
 
-        private string? CurrentUserNameErrorText()
+        private string? CurrentRunnerErrorText()
         {
             var res = new List<ValidationResult>();
-            Validator.TryValidateProperty(this.NewRunner.Username, new ValidationContext(this.NewRunner) { MemberName = nameof(Runner.Username) }, res);
+            Validator.TryValidateProperty(this.NewSponsoringEntry.SponsoredRunner, new ValidationContext(this.NewSponsoringEntry) { MemberName = nameof(SponsoringEntry.SponsoredRunner) }, res);
             return res.FirstOrDefault()?.ErrorMessage;
         }
     }
