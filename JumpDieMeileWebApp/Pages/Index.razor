@@ -6,6 +6,7 @@
 
 
 <MudText>Insgesamt wurden bisher @(this.TotalDistance) km gelaufen.</MudText>
+<MudText>Insgesamt gibt es @(this.SponsoringEntries.Count) Sponsoren Einträge.</MudText>
 
 @code
 {
@@ -13,6 +14,7 @@
     public IPersistenceProvider PersistenceProvider { get; private set; } = null!;
 
     private IList<Run> Runs { get; set; } = new List<Run>();
+    private IList<SponsoringEntry> SponsoringEntries { get; set; } = new List<SponsoringEntry>();
 
     private decimal TotalDistance => this.Runs.Sum(x => x.DistanceKm);
 
@@ -24,9 +26,8 @@
 
     private async Task Refresh()
     {
-        Console.WriteLine($"[{DateTime.Now}]: Reloading runs from db");
         this.Runs = await this.PersistenceProvider.GetAllPersistedRuns();
-        Console.WriteLine($"[{DateTime.Now}]: Finished reload");
+        this.SponsoringEntries = await this.PersistenceProvider.GetAllPersistedSponsoringEntries();
         this.StateHasChanged();
     }
 }

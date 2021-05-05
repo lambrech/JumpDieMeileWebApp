@@ -20,9 +20,13 @@
 
         private static readonly string RunTableName = "run_table";
 
+        private static readonly string SponsoringTableName = "sponsoring_table";
+
         private List<Runner> lastFetchedRunners = new();
 
         private List<Run> lastFetchedRuns = new();
+
+        private List<SponsoringEntry> lastFetchedSponsoringEntries = new();
 
         public async Task<PersistResult> PersistRunner(Runner runner)
         {
@@ -129,10 +133,8 @@
         {
             var sqlCount = $"SELECT Count(*) as `count` FROM {RunTableName}";
             var queryResultCount = await QuerySqlAsync(sqlCount);
-            Console.WriteLine($"[{DateTime.Now}]: Got count");
 
             var currentCount = JsonSerializerExtensions.DeserializeAnonymousType(queryResultCount.Trim().TrimStart('[').TrimEnd(']'), new { count = 0 })?.count;
-            Console.WriteLine($"[{DateTime.Now}]: Deserialized count");
 
             if (currentCount == this.lastFetchedRunners.Count)
             {
@@ -141,10 +143,8 @@
 
             var sql = $"SELECT * FROM {RunTableName}";
             var queryResult = await QuerySqlAsync(sql);
-            Console.WriteLine($"[{DateTime.Now}]: Got runs");
 
             var currentRunners = await this.GetAllPersistedRunners();
-            Console.WriteLine($"[{DateTime.Now}]: Got all deserialized runners");
 
 
             var converter = new RunnerDeserializeJsonConverter(currentRunners);
@@ -153,7 +153,6 @@
                 queryResult,
                 new JsonSerializerOptions { Converters = { converter, new TimeSpanDeserializeJsonConverter(), new StringDeserializeJsonConverter() } });
 
-            Console.WriteLine($"[{DateTime.Now}]: Got all deserialized runs");
             if (list != null)
             {
                 this.lastFetchedRuns = list;
@@ -167,12 +166,77 @@
 
         public async Task<PersistResult> PersistSponsoringEntry(SponsoringEntry sponsoringEntry)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var sql = @$"INSERT INTO `{SponsoringTableName}` (`Id`, `ModelVersion`, `CreationTimestampUtc`, `FirstName`, `LastName`, `Email`, `Location`, `Postcode`, `StreetHouseNr`, `Gender`, `SponsoringMode`, `RunnerId`, `ImmediateInEuro`, `PerKmInEuro`) VALUES
+('{MySqlHelper.EscapeString(sponsoringEntry.Id.ToString())}',
+{sponsoringEntry.ModelVersion},
+'{MySqlHelper.EscapeString(JsonSerializer.Serialize(sponsoringEntry.CreationTimestampUtc).Trim('\"'))}',
+'{MySqlHelper.EscapeString(sponsoringEntry.FirstName)}',
+'{MySqlHelper.EscapeString(sponsoringEntry.LastName)}',
+'{MySqlHelper.EscapeString(sponsoringEntry.Email)}',
+'{MySqlHelper.EscapeString(sponsoringEntry.Location)}',
+'{MySqlHelper.EscapeString(sponsoringEntry.Postcode)}',
+'{MySqlHelper.EscapeString(sponsoringEntry.StreetHouseNr)}',
+'{(sponsoringEntry.Gender.HasValue ? (int)sponsoringEntry.Gender.Value : "NULL")}',
+'{(sponsoringEntry.SponsoringMode.HasValue ? (int)sponsoringEntry.SponsoringMode.Value : "NULL")}',
+{(sponsoringEntry.SponsoredRunner != null ? $"'{MySqlHelper.EscapeString(sponsoringEntry.SponsoredRunner.Id.ToString())}'" : "NULL")},
+{(sponsoringEntry.ImmediateInEuro.HasValue ? sponsoringEntry.ImmediateInEuro.Value.ToString(CultureInfo.InvariantCulture) : "NULL")},
+{(sponsoringEntry.PerKmInEuro.HasValue ? sponsoringEntry.PerKmInEuro.Value.ToString(CultureInfo.InvariantCulture) : "NULL")});";
+
+                var response = await QuerySqlAsync(sql);
+
+                if (response.Contains("Query completed successfully"))
+                {
+                    return new PersistResultSuccess();
+                }
+
+                if (response.Contains("Query FAILED"))
+                {
+                    return new PersistResultError { ErrorMessage = "Fehler beim speichern." };
+                }
+            }
+            catch (Exception e)
+            {
+                return new PersistResultError { ErrorMessage = e.ToString() };
+            }
+
+            return new PersistResultError { ErrorMessage = "Unexpected error" };
         }
 
         public async Task<IList<SponsoringEntry>> GetAllPersistedSponsoringEntries()
         {
-            throw new NotImplementedException();
+            var sqlCount = $"SELECT Count(*) as `count` FROM {SponsoringTableName}";
+            var queryResultCount = await QuerySqlAsync(sqlCount);
+
+            var currentCount = JsonSerializerExtensions.DeserializeAnonymousType(queryResultCount.Trim().TrimStart('[').TrimEnd(']'), new { count = 0 })?.count;
+
+            if (currentCount == this.lastFetchedSponsoringEntries.Count)
+            {
+                return this.lastFetchedSponsoringEntries;
+            }
+
+            var sql = $"SELECT * FROM {SponsoringTableName}";
+            var queryResult = await QuerySqlAsync(sql);
+
+            var currentRunners = await this.GetAllPersistedRunners();
+
+
+            var converter = new RunnerDeserializeJsonConverter(currentRunners);
+
+            var list = JsonSerializer.Deserialize<List<SponsoringEntry>>(
+                queryResult,
+                new JsonSerializerOptions { Converters = { converter, new TimeSpanDeserializeJsonConverter(), new StringDeserializeJsonConverter() } });
+
+            if (list != null)
+            {
+                this.lastFetchedSponsoringEntries = list;
+                return list;
+            }
+
+#pragma warning disable CA2201 // Do not raise reserved exception types
+            throw new Exception("Datenbank Rückgabe konnte nicht verarbeitet werden");
+#pragma warning restore CA2201 // Do not raise reserved exception types
         }
 
         private static async Task<string> QuerySqlAsync(string sql)

@@ -19,16 +19,16 @@ namespace JumpDieMeileWebApp
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
             builder.Services.AddMudServices();
 
-            var mem = new MemoryPersistenceProvider();
-            builder.Services.AddSingleton<IPersistenceProvider>(mem);
-            //builder.Services.AddSingleton<IPersistenceProvider>(new DbRelayPersistenceProvider());
+            //var mem = new MemoryPersistenceProvider();
+            //builder.Services.AddSingleton<IPersistenceProvider>(mem);
+            builder.Services.AddSingleton<IPersistenceProvider>(new DbRelayPersistenceProvider());
 
 
-            for (int i = 0; i < 300; i++)
-            {
-                var runner = new Runner { FirstName = $"TestP{i}", LastName = "Alter", Username = $"run2_dude-{i}", Email = "web@web.de" };
-                await mem.PersistRunner(runner);
-            }
+            //for (int i = 0; i < 300; i++)
+            //{
+            //    var runner = new Runner { FirstName = $"TestP{i}", LastName = "Alter", Username = $"run2_dude-{i}", Email = "web@web.de" };
+            //    await mem.PersistRunner(runner);
+            //}
 
             await builder.Build().RunAsync();
         }
