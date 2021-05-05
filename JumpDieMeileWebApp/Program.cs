@@ -37,11 +37,11 @@ namespace JumpDieMeileWebApp
 
 /*
  * Work to do:
- * Performance when loading ~10000 rows
+ * Performance when loading ~10000 rows - not much we can do right now. problem is deserialize performance in webassembly
  * On saving handling / On loading handling
  * Fail saving loading handling
  *
- * After register pages
+ * After register pages - ok for initial
  *
  * Initial load animation
  *

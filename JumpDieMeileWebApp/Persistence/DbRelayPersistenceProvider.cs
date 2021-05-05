@@ -78,7 +78,7 @@
                 return this.lastFetchedRunners;
             }
 
-            var sql = $"SELECT * FROM {RunnerTableName}";
+            var sql = $"SELECT `Id`, `ModelVersion`, `CreationTimestampUtc`, `Username` FROM {RunnerTableName}";
             var queryResult = await QuerySqlAsync(sql);
 
             var list = JsonSerializer.Deserialize<List<Runner>>(
@@ -216,7 +216,7 @@
                 return this.lastFetchedSponsoringEntries;
             }
 
-            var sql = $"SELECT * FROM {SponsoringTableName}";
+            var sql = $"SELECT `Id`, `ModelVersion`, `CreationTimestampUtc`, `SponsoringMode`, `RunnerId`, `ImmediateInEuro`, `PerKmInEuro` FROM {SponsoringTableName}";
             var queryResult = await QuerySqlAsync(sql);
 
             var currentRunners = await this.GetAllPersistedRunners();
