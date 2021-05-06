@@ -1,0 +1,40 @@
+﻿@using System.Globalization
+<MudPaper Elevation="4" Style="align-self: center; width: 100%" Class="vertical-wrap-panel pa-6 ma-6" >
+
+    <div class="ma-4">
+        <MudText Typo="Typo.h6">Gesamt Laufziel</MudText>
+        <div>
+            <div class="progress-container">
+                <div class="progress-bar" 
+                     style="width: @((this.TotalDistance / (decimal)16000 * (decimal)100).ToString("####0.###", CultureInfo.InvariantCulture))%;">
+                </div>
+            </div>
+            <div class="progress-text">
+                <MudText Typo="Typo.h6">@(this.TotalDistance.ToString("####0.###")) von 16000km</MudText>
+            </div>
+        </div>
+    </div>
+    
+    <p></p>
+    <MudExpansionPanels>
+        <MudExpansionPanel Text="Einzelstrecken-Barometer" @bind-IsExpanded="this.ShowSingleRuns">
+        @foreach (var result in this.CalculateCurrentMilestoneResults())
+        {
+            <div class="mx-6">
+                <MudText Typo="Typo.subtitle2">@($"Ziel: {result.MileStone.Location}" + (string.IsNullOrWhiteSpace(result.MileStone.ShortName) ? "" : $", Heimat von {result.MileStone.ShortName}"))</MudText>
+                <div>
+                    <div class="progress-container" style="height: 28px">
+                        <div class="progress-bar"
+                             style="width: @((result.Percent * 100).ToString("####0.###", CultureInfo.InvariantCulture))%;">
+                        </div>
+                    </div>
+                    <div class="progress-text">
+                        <MudText Typo="Typo.subtitle2">@($"{result.CurrentDistance.ToString("####0.###")} von {result.MileStoneDistance.ToString("####0.###")} km")</MudText>
+                    </div>
+                </div>
+            </div>
+        }
+        </MudExpansionPanel>
+    </MudExpansionPanels>
+
+</MudPaper>

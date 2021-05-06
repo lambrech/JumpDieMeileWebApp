@@ -1,5 +1,6 @@
 ﻿namespace JumpDieMeileWebApp.Pages
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -30,6 +31,7 @@
         private async Task Refresh()
         {
             this.TotalDistance = await this.PersistenceProvider.GetDistanceSumOfAllRuns();
+            //this.TotalDistance = new Random().Next(1, 20000);
             this.StateHasChanged();
         }
 
