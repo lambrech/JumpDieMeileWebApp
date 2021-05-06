@@ -14,15 +14,38 @@
     <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png" />
 </head>
 
-<body style="font-family: Roboto Condensed,sans-serif;">
+<body id="jdm_wa_body_2021" style="font-family: Roboto Condensed,sans-serif; width: 95%;">
     <div id="app">Loading...</div>
 
-    <div id="blazor-error-ui">
-        An unhandled error has occurred.
-        <a href="" class="reload">Reload</a>
-        <a class="dismiss">🗙</a>
-    </div>
-    <script src="helper/brotli-decode.js"></script>
+<div id="blazor-error-ui">
+    An unhandled error has occurred.
+    <a href="" class="reload">Reload</a>
+    <a class="dismiss">🗙</a>
+</div>
+
+<script>
+    // code to send message each time body resizes -> we can use these message to resize an iframe
+    let height;
+
+    const sendPostMessage = () => {
+        if (height !== document.getElementById('jdm_wa_body_2021').offsetHeight) {
+            height = document.getElementById('jdm_wa_body_2021').offsetHeight;
+            window.parent.postMessage({
+                frameHeight: height
+            }, '*');
+        }
+    }
+
+    elem = document.getElementById("jdm_wa_body_2021");
+
+    let resizeObserver = new ResizeObserver(() => {
+        sendPostMessage();
+    });
+
+    resizeObserver.observe(elem);
+</script>
+
+<script src="helper/brotli-decode.js"></script>
     <script src="_framework/blazor.webassembly.js" autostart="false"></script>
     <script>
         Blazor.start({
