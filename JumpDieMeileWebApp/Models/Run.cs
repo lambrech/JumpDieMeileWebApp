@@ -12,7 +12,7 @@
             this.Duration = duration;
         }
 
-        public Runner Runner { get; }
+        public Runner? Runner { get; }
 
         public decimal DistanceKm { get; }
 

@@ -100,11 +100,11 @@
             try
             {
                 var sql =
-                    @$"INSERT INTO `{RunTableName}` (`Id`, `ModelVersion`, `CreationTimestampUtc`, `RunnerId`, `DistanceKm`, `StartTimestampUtc`, `Duration`) VALUES
+                    @$"INSERT INTO `{RunTableName}` (`Id`, `ModelVersion`, `CreationTimestampUtc`, `Runner`, `DistanceKm`, `StartTimestampUtc`, `Duration`) VALUES
 ('{MySqlHelper.EscapeString(run.Id.ToString())}',
 {run.ModelVersion},
 '{MySqlHelper.EscapeString(JsonSerializer.Serialize(run.CreationTimestampUtc).Trim('\"'))}',
-'{MySqlHelper.EscapeString(run.Runner.Id.ToString())}',
+'{MySqlHelper.EscapeString(run.Runner?.Id.ToString())}',
 {run.DistanceKm.ToString(CultureInfo.InvariantCulture)},
 '{MySqlHelper.EscapeString(JsonSerializer.Serialize(run.StartTimestampUtc).Trim('\"'))}',
 {run.Duration?.Ticks.ToString(CultureInfo.InvariantCulture) ?? "NULL"});";
@@ -168,7 +168,7 @@
         {
             try
             {
-                var sql = @$"INSERT INTO `{SponsoringTableName}` (`Id`, `ModelVersion`, `CreationTimestampUtc`, `FirstName`, `LastName`, `Email`, `Location`, `Postcode`, `StreetHouseNr`, `Gender`, `SponsoringMode`, `RunnerId`, `ImmediateInEuro`, `PerKmInEuro`) VALUES
+                var sql = @$"INSERT INTO `{SponsoringTableName}` (`Id`, `ModelVersion`, `CreationTimestampUtc`, `FirstName`, `LastName`, `Email`, `Location`, `Postcode`, `StreetHouseNr`, `Gender`, `SponsoringMode`, `Runner`, `ImmediateInEuro`, `PerKmInEuro`) VALUES
 ('{MySqlHelper.EscapeString(sponsoringEntry.Id.ToString())}',
 {sponsoringEntry.ModelVersion},
 '{MySqlHelper.EscapeString(JsonSerializer.Serialize(sponsoringEntry.CreationTimestampUtc).Trim('\"'))}',
@@ -216,7 +216,7 @@
                 return this.lastFetchedSponsoringEntries;
             }
 
-            var sql = $"SELECT `Id`, `ModelVersion`, `CreationTimestampUtc`, `SponsoringMode`, `RunnerId`, `ImmediateInEuro`, `PerKmInEuro` FROM {SponsoringTableName}";
+            var sql = $"SELECT `Id`, `ModelVersion`, `CreationTimestampUtc`, `SponsoringMode`, `Runner`, `ImmediateInEuro`, `PerKmInEuro` FROM {SponsoringTableName}";
             var queryResult = await QuerySqlAsync(sql);
 
             var currentRunners = await this.GetAllPersistedRunners();

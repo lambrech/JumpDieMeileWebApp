@@ -46,7 +46,7 @@
             </CardHeaderContent>
         </MudCardHeader>
         <MudCardContent>
-            <MudTextField ReadOnly="true" Class="my-4" Label="Läufer Anzeigename" Value="this.RegisteredRun?.Runner.FullDisplayName"  Variant="Variant.Outlined"/>
+            <MudTextField ReadOnly="true" Class="my-4" Label="Läufer Anzeigename" Value="this.RegisteredRun?.Runner?.FullDisplayName"  Variant="Variant.Outlined"/>
             <MudTextField ReadOnly="true" Class="my-4" Label="Strecke" Value="@($"{this.RegisteredRun?.DistanceKm} km")"  Variant="Variant.Outlined"/>
             <MudTextField ReadOnly="true" Class="my-4" Label="Start Datum" Value="@(this.RegisteredRun?.StartTimestampUtc.ToLocalTime().ToString("dd.MM.yyyy"))"  Variant="Variant.Outlined"/>
             <MudTextField ReadOnly="true" Class="my-4" Label="Startzeit" Value="@($"{this.RegisteredRun?.StartTimestampUtc.ToLocalTime().ToString("HH:mm")} Uhr")"  Variant="Variant.Outlined"/>

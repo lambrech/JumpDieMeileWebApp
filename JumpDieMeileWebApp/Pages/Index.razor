@@ -7,6 +7,7 @@
 
 <MudText>Insgesamt wurden bisher @(this.TotalDistance) km gelaufen.</MudText>
 <MudText>Insgesamt gibt es @(this.SponsoringEntries.Count) Sponsoren Einträge.</MudText>
+<MudText>Gerade @(this.CurrentEuros) €.</MudText>
 
 @code
 {
@@ -18,6 +19,8 @@
 
     private decimal TotalDistance => this.Runs.Sum(x => x.DistanceKm);
 
+    private decimal CurrentEuros = 0;
+
     protected override async Task OnInitializedAsync()
     {
         await this.Refresh();
@@ -28,6 +31,49 @@
     {
         this.Runs = await this.PersistenceProvider.GetAllPersistedRuns();
         this.SponsoringEntries = await this.PersistenceProvider.GetAllPersistedSponsoringEntries();
+        this.Calc();
         this.StateHasChanged();
+    }
+
+    private void Calc()
+    {
+        var dist = this.TotalDistance;
+        
+        var runnersRunsDict = this.Runs.Where(x => x.Runner != null).GroupBy(x => x.Runner)
+                                  .ToDictionary(x => x.Key!, x => x.Sum(run => run.DistanceKm));
+
+        var allEuros = (decimal)0;
+        foreach (var sponsoringEntry in this.SponsoringEntries)
+        {
+            switch (sponsoringEntry.SponsoringMode)
+            {
+                case SponsoringMode.SingleRunner:
+                    if (sponsoringEntry.SponsoredRunner != null && runnersRunsDict.TryGetValue(sponsoringEntry.SponsoredRunner, out var runs))
+                    {
+                        if (sponsoringEntry.ImmediateInEuro.HasValue && runs > 0)
+                        {
+                            allEuros += sponsoringEntry.ImmediateInEuro.Value;
+                        }
+                        if (sponsoringEntry.PerKmInEuro.HasValue)
+                        {
+                            allEuros += runs * sponsoringEntry.PerKmInEuro.Value;
+                        }
+                    }
+                    
+                    break;
+                case SponsoringMode.WholeProject:
+                    if (sponsoringEntry.ImmediateInEuro.HasValue && dist > 0)
+                    {
+                        allEuros += sponsoringEntry.ImmediateInEuro.Value;
+                    }
+                    if (sponsoringEntry.PerKmInEuro.HasValue)
+                    {
+                        allEuros += dist * sponsoringEntry.PerKmInEuro.Value;
+                    }
+                    break;
+            }
+        }
+
+        this.CurrentEuros = allEuros;
     }
 }
