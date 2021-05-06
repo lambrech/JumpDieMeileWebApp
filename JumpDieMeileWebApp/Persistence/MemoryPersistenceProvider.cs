@@ -73,5 +73,11 @@
             await Task.Delay(0);
             return this.sponsoringEntries;
         }
+
+        public async Task<decimal> GetDistanceSumOfAllRuns()
+        {
+            await Task.Delay(0);
+            return this.persistedRuns.Sum(x => x.DistanceKm);
+        }
     }
 }

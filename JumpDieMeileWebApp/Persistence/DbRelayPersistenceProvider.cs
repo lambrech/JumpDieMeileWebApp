@@ -239,6 +239,16 @@
 #pragma warning restore CA2201 // Do not raise reserved exception types
         }
 
+        public async Task<decimal> GetDistanceSumOfAllRuns()
+        {
+            var runsSumSql = $"SELECT SUM(DistanceKm) as `sum` FROM {RunTableName}";
+            var queryResultCount = await QuerySqlAsync(runsSumSql);
+
+            var runsSum = JsonSerializerExtensions.DeserializeAnonymousType(queryResultCount.Trim().TrimStart('[').TrimEnd(']'), new { sum = (decimal)0 })?.sum;
+
+            return runsSum ?? throw new Exception("Laden der Summe aller Läufe fehlgeschlagen");
+        }
+
         private static async Task<string> QuerySqlAsync(string sql)
         {
             using var client = new HttpClient();

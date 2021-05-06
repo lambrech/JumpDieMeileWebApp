@@ -1,79 +1,53 @@
 ﻿@page "/"
-@using JumpDieMeileWebApp.Persistence
-@using JumpDieMeileWebApp.Models
+@using System.Globalization
 
-<MudButton OnClick="@this.Refresh"></MudButton>
+<div class="vertical-wrap-panel" style="width: 85%" >
+    <MudButton OnClick="@this.Refresh" style="align-self: center;">
+        <MudPaper Elevation="5" Class="pa-8">
+            <MudText Typo="Typo.h6" Color="Color.Primary">Aktueller Kilometerstand</MudText>
+            <p>
+                <MudText Typo="Typo.h3" Color="Color.Secondary">@(this.TotalDistance) km</MudText>
+            </p>
+        </MudPaper>
+    </MudButton>
 
-
-<MudText>Insgesamt wurden bisher @(this.TotalDistance) km gelaufen.</MudText>
-<MudText>Insgesamt gibt es @(this.SponsoringEntries.Count) Sponsoren Einträge.</MudText>
-<MudText>Gerade @(this.CurrentEuros) €.</MudText>
-
-@code
-{
-    [Inject]
-    public IPersistenceProvider PersistenceProvider { get; private set; } = null!;
-
-    private IList<Run> Runs { get; set; } = new List<Run>();
-    private IList<SponsoringEntry> SponsoringEntries { get; set; } = new List<SponsoringEntry>();
-
-    private decimal TotalDistance => this.Runs.Sum(x => x.DistanceKm);
-
-    private decimal CurrentEuros = 0;
-
-    protected override async Task OnInitializedAsync()
-    {
-        await this.Refresh();
-        await base.OnInitializedAsync();
-    }
-
-    private async Task Refresh()
-    {
-        this.Runs = await this.PersistenceProvider.GetAllPersistedRuns();
-        this.SponsoringEntries = await this.PersistenceProvider.GetAllPersistedSponsoringEntries();
-        this.Calc();
-        this.StateHasChanged();
-    }
-
-    private void Calc()
-    {
-        var dist = this.TotalDistance;
-        
-        var runnersRunsDict = this.Runs.Where(x => x.Runner != null).GroupBy(x => x.Runner)
-                                  .ToDictionary(x => x.Key!, x => x.Sum(run => run.DistanceKm));
-
-        var allEuros = (decimal)0;
-        foreach (var sponsoringEntry in this.SponsoringEntries)
+    
+    <MudPaper Elevation="4" Style="align-self: center; width: 100%" Class="vertical-wrap-panel pa-6 ma-6" >
+        <MudButton Style="align-self: center" Variant="Variant.Outlined" Class="mb-6" OnClick="@this.StartCalculateCurrentSponsoringState">Aktuellen Spendenstand berechnen</MudButton>
+        @if (this.CalculateCurrentSponsoringStateTaskCompletion == null)
         {
-            switch (sponsoringEntry.SponsoringMode)
-            {
-                case SponsoringMode.SingleRunner:
-                    if (sponsoringEntry.SponsoredRunner != null && runnersRunsDict.TryGetValue(sponsoringEntry.SponsoredRunner, out var runs))
-                    {
-                        if (sponsoringEntry.ImmediateInEuro.HasValue && runs > 0)
-                        {
-                            allEuros += sponsoringEntry.ImmediateInEuro.Value;
-                        }
-                        if (sponsoringEntry.PerKmInEuro.HasValue)
-                        {
-                            allEuros += runs * sponsoringEntry.PerKmInEuro.Value;
-                        }
-                    }
-                    
-                    break;
-                case SponsoringMode.WholeProject:
-                    if (sponsoringEntry.ImmediateInEuro.HasValue && dist > 0)
-                    {
-                        allEuros += sponsoringEntry.ImmediateInEuro.Value;
-                    }
-                    if (sponsoringEntry.PerKmInEuro.HasValue)
-                    {
-                        allEuros += dist * sponsoringEntry.PerKmInEuro.Value;
-                    }
-                    break;
-            }
+            <MudText>Abhängig von der Anzahl der Läufe und Sponsoren kann dies unterschiedlich lange dauern. Während der Berechnung lässt sich die Seite nicht richtig bedienen. (Auch dein Browser hat einen Einfluss auf die Berechnungszeit. Chrome scheint hierbei beispielsweise schneller zu sein als Firefox).</MudText>
         }
-
-        this.CurrentEuros = allEuros;
-    }
-}
+        
+        @if (this.CalculateCurrentSponsoringStateTaskCompletion?.IsNotCompleted ?? false)
+        {
+            <MudText>Laden und berechnen...<br/>Während der Berechnung lässt sich die Seite nicht richtig bedienen. (Auch dein Browser hat einen Einfluss auf die Berechnungszeit. Chrome scheint hierbei beispielsweise schneller zu sein als Firefox).</MudText>
+        }
+        
+        @if (this.CalculateCurrentSponsoringStateTaskCompletion?.IsCompleted ?? false)
+        {
+            <MudText>Aktueller Spendenstand: @(this.CurrentEuros) €.</MudText>
+            <div>
+                <div style="height: 40px;
+                            overflow: hidden;
+                            background-color: #f5f5f5;
+                            border-radius: 5px;">
+                    <div style="background-color: #C30039;
+                                float: left;
+                                height: 100%;
+                                font-size: 12px;
+                                line-height: 20px;
+                                color: #fff;
+                                text-align: center; width: @((this.CurrentEuros / (decimal)10000 * (decimal)100).ToString("#####.###", CultureInfo.InvariantCulture))%;">
+                    </div>
+                </div>
+                <div style="display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            margin: 8px">
+                    <h3>@(this.CurrentEuros.ToString("#####.###"))  von 10.000€</h3>
+                </div>
+            </div>
+        }
+    </MudPaper>
+</div>

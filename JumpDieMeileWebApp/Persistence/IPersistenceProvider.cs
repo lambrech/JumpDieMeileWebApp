@@ -17,5 +17,7 @@
         Task<PersistResult> PersistSponsoringEntry(SponsoringEntry sponsoringEntry);
 
         Task<IList<SponsoringEntry>> GetAllPersistedSponsoringEntries();
+
+        Task<decimal> GetDistanceSumOfAllRuns();
     }
 }
