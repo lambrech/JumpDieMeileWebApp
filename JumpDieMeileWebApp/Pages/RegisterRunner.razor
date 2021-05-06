@@ -5,7 +5,7 @@
     }
 </style>
 
-<div class="@(this.RegistrationDone ? "display-none" : "")" style="min-width: 325px; width: 50%;">
+<div class="@(this.RegistrationDone ? "display-none" : "")" style="min-width: 300px; width: 70%;">
     <EditForm EditContext="@this.CurrentEditContext"  OnValidSubmit="this.HandleValidSubmit">
         <DataAnnotationsValidator />
         <MudCard Outlined="true" Elevation="4">
@@ -42,7 +42,7 @@
 </MudPaper>
 
 
-<div class="@(!this.RegistrationDone ? "display-none" : "")" style="min-width: 325px; width: 50%;">
+<div class="@(!this.RegistrationDone ? "display-none" : "")" style="min-width: 300px; width: 70%;">
     
     <MudCard Outlined="true" Elevation="4">
         <MudCardHeader>

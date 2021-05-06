@@ -4,7 +4,7 @@
     }
 </style>
 
-<div class="@(this.RunRegistered ? "display-none" : "")" style="min-width: 325px; width: 50%;">
+<div class="@(this.RunRegistered ? "display-none" : "")" style="min-width: 300px; width: 70%;">
     <MudForm @ref="this.CurrentForm">
         <MudCard Outlined="true" Elevation="4">
             <MudCardHeader>
@@ -37,7 +37,7 @@
     <MudText Color="Color.Secondary" Typo="Typo.h6">@this.SaveFailedErrorText</MudText>
 </MudPaper>
 
-<div class="@(!this.RunRegistered ? "display-none" : "")" style="min-width: 325px; width: 50%;">
+<div class="@(!this.RunRegistered ? "display-none" : "")" style="min-width: 300px; width: 70%;">
     
     <MudCard Outlined="true" Elevation="4">
         <MudCardHeader>

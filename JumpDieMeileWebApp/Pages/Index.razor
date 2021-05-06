@@ -27,7 +27,7 @@
     }
 </style>
 
-<div class="vertical-wrap-panel" style="width: 85%" >
+<div class="vertical-wrap-panel" style="width: 95%">
     <MudButton OnClick="@this.Refresh" style="align-self: center;">
         <MudPaper Elevation="5" Class="pa-8">
             <MudText Typo="Typo.h6" Color="Color.Primary">Aktueller Kilometerstand</MudText>
@@ -40,7 +40,7 @@
     <JdmDistanceGoalState TotalDistance="@this.TotalDistance"></JdmDistanceGoalState>
 
     
-    <MudPaper Elevation="4" Style="align-self: center; width: 100%" Class="vertical-wrap-panel pa-6 ma-6" >
+    <MudPaper Elevation="4" Style="align-self: center; width: 100%;" Class="vertical-wrap-panel pa-6" >
         <MudButton Style="align-self: center" Variant="Variant.Outlined" Class="mb-6" OnClick="@this.StartCalculateCurrentSponsoringState">Aktuellen Spendenstand berechnen</MudButton>
         @if (this.CalculateCurrentSponsoringStateTaskCompletion == null)
         {
