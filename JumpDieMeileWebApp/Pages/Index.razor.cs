@@ -14,6 +14,8 @@
         [Inject]
         public IPersistenceProvider PersistenceProvider { get; private set; } = null!;
 
+        public NotifyTaskCompletion? CalculateCurrentSponsoringStateTaskCompletion { get; set; }
+
         private IList<Run>? Runs { get; set; }
 
         private IList<SponsoringEntry>? SponsoringEntries { get; set; }
@@ -35,8 +37,6 @@
             this.StateHasChanged();
         }
 
-        public NotifyTaskCompletion? CalculateCurrentSponsoringStateTaskCompletion { get; set; }
-
         private void StartCalculateCurrentSponsoringState()
         {
             if (this.CalculateCurrentSponsoringStateTaskCompletion?.IsCompleted ?? false)
@@ -57,13 +57,15 @@
 
         private void Calc()
         {
-            if (this.Runs == null || this.SponsoringEntries == null)
+            if ((this.Runs == null) || (this.SponsoringEntries == null))
             {
                 return;
             }
+
             var dist = this.TotalDistance;
 
-            var runnersRunsDict = this.Runs.Where(x => x.Runner != null).GroupBy(x => x.Runner)
+            var runnersRunsDict = this.Runs.Where(x => x.Runner != null)
+                                      .GroupBy(x => x.Runner)
                                       .ToDictionary(x => x.Key!, x => x.Sum(run => run.DistanceKm));
 
             var allEuros = (decimal)0;
@@ -72,12 +74,13 @@
                 switch (sponsoringEntry.SponsoringMode)
                 {
                     case SponsoringMode.SingleRunner:
-                        if (sponsoringEntry.SponsoredRunner != null && runnersRunsDict.TryGetValue(sponsoringEntry.SponsoredRunner, out var runs))
+                        if ((sponsoringEntry.SponsoredRunner != null) && runnersRunsDict.TryGetValue(sponsoringEntry.SponsoredRunner, out var runs))
                         {
-                            if (sponsoringEntry.ImmediateInEuro.HasValue && runs > 0)
+                            if (sponsoringEntry.ImmediateInEuro.HasValue && (runs > 0))
                             {
                                 allEuros += sponsoringEntry.ImmediateInEuro.Value;
                             }
+
                             if (sponsoringEntry.PerKmInEuro.HasValue)
                             {
                                 allEuros += runs * sponsoringEntry.PerKmInEuro.Value;
@@ -86,14 +89,16 @@
 
                         break;
                     case SponsoringMode.WholeProject:
-                        if (sponsoringEntry.ImmediateInEuro.HasValue && dist > 0)
+                        if (sponsoringEntry.ImmediateInEuro.HasValue && (dist > 0))
                         {
                             allEuros += sponsoringEntry.ImmediateInEuro.Value;
                         }
+
                         if (sponsoringEntry.PerKmInEuro.HasValue)
                         {
                             allEuros += dist * sponsoringEntry.PerKmInEuro.Value;
                         }
+
                         break;
                 }
             }
