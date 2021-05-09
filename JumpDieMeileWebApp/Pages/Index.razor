@@ -54,7 +54,7 @@
         
         @if (this.CalculateCurrentSponsoringStateTaskCompletion?.IsCompleted ?? false)
         {
-            <MudText>Aktueller Spendenstand: @(this.CurrentEuros) €.</MudText>
+            <MudText>Aktueller Spendenstand: @(this.CurrentEuros.ToString("####0.###")) €.</MudText>
             <div>
                 <div class="progress-container">
                     <div class="progress-bar" 
