@@ -241,12 +241,31 @@
 
         public async Task<decimal> GetDistanceSumOfAllRuns()
         {
-            var runsSumSql = $"SELECT SUM(DistanceKm) as `sum` FROM {RunTableName}";
-            var queryResultCount = await QuerySqlAsync(runsSumSql);
+            try
+            {
+                var sqlCount = $"SELECT Count(*) as `count` FROM {RunTableName}";
+                var queryResultCount = await QuerySqlAsync(sqlCount);
 
-            var runsSum = JsonSerializerExtensions.DeserializeAnonymousType(queryResultCount.Trim().TrimStart('[').TrimEnd(']'), new { sum = (decimal)0 })?.sum;
+                var currentCount = JsonSerializerExtensions.DeserializeAnonymousType(queryResultCount.Trim().TrimStart('[').TrimEnd(']'), new { count = 0 })
+                                                          ?.count;
 
-            return runsSum ?? throw new Exception("Laden der Summe aller Läufe fehlgeschlagen");
+                if (currentCount == 0)
+                {
+                    return 0;
+                }
+
+                var runsSumSql = $"SELECT SUM(DistanceKm) as `sum` FROM {RunTableName}";
+                var queryResultSum = await QuerySqlAsync(runsSumSql);
+
+                var runsSum = JsonSerializerExtensions.DeserializeAnonymousType(queryResultSum.Trim().TrimStart('[').TrimEnd(']'), new { sum = (decimal)0 })
+                                                     ?.sum;
+
+                return runsSum ?? throw new Exception("Laden der Summe aller Läufe fehlgeschlagen");
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Laden der Summe aller Läufe fehlgeschlagen", e);
+            }
         }
 
         private static async Task<string> QuerySqlAsync(string sql)
