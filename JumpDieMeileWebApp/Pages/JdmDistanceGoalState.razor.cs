@@ -42,7 +42,7 @@
         [Inject]
         private IJSRuntime? JsRuntime { get; set; }
 
-        private bool ShowSingleRuns { get; set; } = true;
+        private bool ShowSingleRuns { get; set; } = false;
 
         private List<JdmMileStone> MileStones { get; } = new();
 
