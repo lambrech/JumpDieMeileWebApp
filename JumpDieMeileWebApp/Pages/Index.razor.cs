@@ -39,7 +39,7 @@
 
         private void StartCalculateCurrentSponsoringState()
         {
-            if (this.CalculateCurrentSponsoringStateTaskCompletion?.IsCompleted ?? false)
+            if (!this.CalculateCurrentSponsoringStateTaskCompletion?.IsCompleted ?? false)
             {
                 return;
             }

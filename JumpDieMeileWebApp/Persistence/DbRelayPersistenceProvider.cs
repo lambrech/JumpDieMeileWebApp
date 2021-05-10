@@ -168,7 +168,7 @@
         {
             try
             {
-                var sql = @$"INSERT INTO `{SponsoringTableName}` (`Id`, `ModelVersion`, `CreationTimestampUtc`, `FirstName`, `LastName`, `Email`, `Location`, `Postcode`, `StreetHouseNr`, `Gender`, `SponsoringMode`, `Runner`, `ImmediateInEuro`, `PerKmInEuro`) VALUES
+                var sql = @$"INSERT INTO `{SponsoringTableName}` (`Id`, `ModelVersion`, `CreationTimestampUtc`, `FirstName`, `LastName`, `Email`, `Location`, `Postcode`, `StreetHouseNr`, `Gender`, `SponsoringMode`, `SponsoredRunner`, `ImmediateInEuro`, `PerKmInEuro`) VALUES
 ('{MySqlHelper.EscapeString(sponsoringEntry.Id.ToString())}',
 {sponsoringEntry.ModelVersion},
 '{MySqlHelper.EscapeString(JsonSerializer.Serialize(sponsoringEntry.CreationTimestampUtc).Trim('\"'))}',
@@ -216,7 +216,7 @@
                 return this.lastFetchedSponsoringEntries;
             }
 
-            var sql = $"SELECT `Id`, `ModelVersion`, `CreationTimestampUtc`, `SponsoringMode`, `Runner`, `ImmediateInEuro`, `PerKmInEuro` FROM {SponsoringTableName}";
+            var sql = $"SELECT `Id`, `ModelVersion`, `CreationTimestampUtc`, `SponsoringMode`, `SponsoredRunner`, `ImmediateInEuro`, `PerKmInEuro` FROM {SponsoringTableName}";
             var queryResult = await QuerySqlAsync(sql);
 
             var currentRunners = await this.GetAllPersistedRunners();
@@ -298,7 +298,7 @@
         }
     }
 
-    public class RunnerDeserializeJsonConverter : JsonConverter<Runner>
+    public class RunnerDeserializeJsonConverter : JsonConverter<Runner?>
     {
         private readonly IList<Runner> availableRunners;
 
@@ -318,7 +318,7 @@
 
         public override void Write(
             Utf8JsonWriter writer,
-            Runner value,
+            Runner? value,
             JsonSerializerOptions options)
         {
             throw new NotImplementedException();
