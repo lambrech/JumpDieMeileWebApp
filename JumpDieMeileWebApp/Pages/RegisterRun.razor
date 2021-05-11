@@ -16,7 +16,7 @@
                 <MudAutocomplete Class="my-2" Label="Läufer" @bind-Value="this.SelectedRunner" For="(() => this.SelectedRunner)" SearchFunc="this.RunnerSearchFunc"
                                  ResetValueOnEmptyText="true" CoerceText="true" MinCharacters="3" MaxItems="null" Immediate="true" Variant="Variant.Outlined"
                                  ToStringFunc="@(runner => { return runner?.FullDisplayName ?? string.Empty; })"
-                                 HelperText="Beginne deinen Nutzernamen einzugeben, du bekommst dann eine Auswahl angezeigt um deinen Nutzer auszuwählen."/>
+                                 HelperText="Beginne deinen Nutzernamen einzugeben, du bekommst dann eine Auswahl angezeigt um deinen Nutzer auszuwählen. Kannst du den gesuchten Namen nicht finden, muss du diesen Läufer vermutlich erst noch registrieren."/>
                 <MudNumericField Class="my-2" Label="Strecke" @bind-Value="this.Distance"  Variant="Variant.Outlined" Min="0" Max="500" For="(() => this.Distance)"
                                  Adornment="Adornment.End" AdornmentText="km" HelperText="Bitte gib deine Strecke in km ein, z.B. '7,48'" Immediate="true" />
                 <MudDatePicker Class="my-2" Label="Start Datum" @bind-Date="this.StartTimeLocalDate" For="@(() => this.StartTimeLocalDate)" InputVariant="Variant.Outlined"

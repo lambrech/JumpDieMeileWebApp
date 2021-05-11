@@ -19,7 +19,7 @@
         [Inject]
         public IPersistenceProvider PersistenceProvider { get; private set; } = null!;
 
-        [Required(ErrorMessage = "Bitte wähle den Läufer aus, für welchen dieser Lauf gemeldet werden soll.")]
+        [Required(ErrorMessage = "Bitte wähle den Läufer aus, für welchen dieser Lauf gemeldet werden soll. Kannst du den gesuchten Namen nicht finden, muss du diesen Läufer vermutlich erst noch registrieren.")]
         public Runner? SelectedRunner { get; set; }
 
         [Required(ErrorMessage = "Bitte gebe einen validen Zahlenwert für die Strecke an.")]
@@ -29,7 +29,7 @@
         [Required(ErrorMessage = "Bitte gib das Datum an, an welchem der Lauf stattgefunden hat.")]
         public DateTime? StartTimeLocalDate { get; set; }
 
-        [Required(ErrorMessage = "Bitte gib die Uhrzeit an, zu welcher du deinen Lauf begonnen hast.")]
+        [Required(ErrorMessage = "Bitte gib die (ungefähre) Uhrzeit an, zu welcher du deinen Lauf begonnen hast. Eingabeformat <HH:mm>. Z.B. 17:45")]
         public TimeSpan? StartTimeLocalTime { get; set; }
 
         public decimal? DurationInMinutes { get; set; }

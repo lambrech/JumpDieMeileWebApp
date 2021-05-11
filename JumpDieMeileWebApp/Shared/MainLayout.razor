@@ -28,9 +28,6 @@
 <div class="vertical-wrap-panel" >
     <div class="horizontal-wrap-panel-center">
         <MudPaper Class="ma-4">
-            <MudButton OnClick="@(() => { this.NavigationManager.NavigateTo(this.NavigationManager.CreateRoute("/")); })" Color="Color.Secondary" Variant="Variant.Filled">Übersicht</MudButton>
-        </MudPaper>
-        <MudPaper Class="ma-4">
             <MudButton OnClick="@(() => { this.NavigationManager.NavigateTo(this.NavigationManager.CreateRoute(PageRoutes.RegisterRunRoute)); })"
                        Color="Color.Secondary" Variant="Variant.Filled">Lauf eintragen</MudButton>
         </MudPaper>
@@ -41,6 +38,9 @@
         <MudPaper Class="ma-4">
             <MudButton OnClick="@(() => { this.NavigationManager.NavigateTo(this.NavigationManager.CreateRoute(PageRoutes.RegisterSponsorRoute)); })"
                        Color="Color.Secondary" Variant="Variant.Filled">Sponsoring hinzufügen</MudButton>
+        </MudPaper>
+        <MudPaper Class="ma-4">
+            <MudButton OnClick="@(() => { this.NavigationManager.NavigateTo(this.NavigationManager.CreateRoute("/")); })" Color="Color.Secondary" Variant="Variant.Filled">Strecken Übersicht</MudButton>
         </MudPaper>
     </div>
 

@@ -67,7 +67,7 @@
     <MudCard Outlined="true" Elevation="4">
         <MudCardHeader>
             <CardHeaderContent>
-                <MudText Typo="Typo.h6">Danke für die Unterstützung.</MudText>
+                <MudText Typo="Typo.h6">Danke für die Unterstützung. Deine Angaben wurden zur Kontrolle per Mail auch an '@(this.RegisteredSponsoringEntry?.Email)' versendet.</MudText>
             </CardHeaderContent>
         </MudCardHeader>
         <MudCardContent>
@@ -92,7 +92,8 @@
             {
                 <MudTextField ReadOnly="true" Class="my-4" Label="Spende pro gelaufenem km" Value="@($"{this.RegisteredSponsoringEntry.PerKmInEuro.Value} €")"  Variant="Variant.Outlined"/>
             }
-
+            
+            <MudText Typo="Typo.h6">Danke für die Unterstützung. Deine Angaben wurden zur Kontrolle per Mail auch an '@(this.RegisteredSponsoringEntry?.Email)' versendet.</MudText>
         </MudCardContent>
         <MudCardActions>
             <MudButton  Class="ma-4" OnClick="@(async () => { this.NavigationManager.NavigateTo(this.NavigationManager.CreateRoute(PageRoutes.RegisterRunRoute)); })"
