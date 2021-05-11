@@ -188,6 +188,7 @@
 
                 if (response.Contains("Query completed successfully"))
                 {
+                    this.TriggerAutoMailService();
                     return new PersistResultSuccess();
                 }
 
@@ -202,6 +203,18 @@
             }
 
             return new PersistResultError { ErrorMessage = "Unexpected error" };
+        }
+
+        private async void TriggerAutoMailService()
+        {
+            using var client = new HttpClient();
+            var request = new HttpRequestMessage
+            {
+                RequestUri = new Uri("https://impulse-online.de/jdm_wa_db_relay/trigger_mail_service.php"),
+                Method = HttpMethod.Get
+            };
+
+            var result = await client.SendAsync(request);
         }
 
         public async Task<IList<SponsoringEntry>> GetAllPersistedSponsoringEntries()
