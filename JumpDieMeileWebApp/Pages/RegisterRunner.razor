@@ -67,7 +67,7 @@
             }
             
         </MudCardContent>
-        <MudCardActions>
+        <MudCardActions Class="d-flex flex-wrap justify-center">
             <MudButton  Class="ma-4" OnClick="@(async () => { await this.OnInitializedAsync(); this.StateHasChanged(); })" Variant="Variant.Outlined">Weiteren Läufer registrieren</MudButton>
             <MudButton  Class="ma-4" OnClick="@(async () => { this.NavigationManager.NavigateTo(this.NavigationManager.CreateRoute(PageRoutes.RegisterRunRoute)); })"
                         Variant="Variant.Outlined">Einen Lauf eintragen</MudButton>

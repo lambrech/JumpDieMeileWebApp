@@ -56,7 +56,7 @@
                 <MudTextField ReadOnly="true" Class="my-4" Label="Deine Geschwindigkeit" Value="@($"{this.RegisteredRun.AverageSpeedKmh.Value.ToString("####.####")} km/h")" Variant="Variant.Outlined" />
             }
         </MudCardContent>
-        <MudCardActions>
+        <MudCardActions Class="d-flex flex-wrap justify-center">
             <MudButton Class="ma-4" OnClick="@this.Reset" Variant="Variant.Outlined">Weiteren Lauf eintragen</MudButton>
         </MudCardActions>
     </MudCard>

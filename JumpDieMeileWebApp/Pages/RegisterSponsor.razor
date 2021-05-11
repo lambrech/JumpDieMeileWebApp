@@ -95,7 +95,7 @@
             
             <MudText Typo="Typo.h6">Danke für die Unterstützung. Deine Angaben wurden zur Kontrolle per Mail auch an '@(this.RegisteredSponsoringEntry?.Email)' versendet.</MudText>
         </MudCardContent>
-        <MudCardActions>
+        <MudCardActions Class="d-flex flex-wrap justify-center">
             <MudButton  Class="ma-4" OnClick="@(async () => { this.NavigationManager.NavigateTo(this.NavigationManager.CreateRoute(PageRoutes.RegisterRunRoute)); })"
                         Variant="Variant.Outlined">Einen Lauf eintragen</MudButton>
             <MudButton Class="ma-4" OnClick="@(async () => { this.NavigationManager.NavigateTo(this.NavigationManager.CreateRoute(PageRoutes.RegisterRunnerRoute)); })"
