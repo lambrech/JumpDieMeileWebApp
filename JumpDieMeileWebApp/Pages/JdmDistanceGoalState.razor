@@ -20,24 +20,31 @@
     <div id="@MapContainerId" style="height: 450px; width: 90%; align-self: center;"></div>
     <p></p>
     
-    <MudExpansionPanels>
-        <MudExpansionPanel Text="Einzelstrecken-Barometer" @bind-IsExpanded="this.ShowSingleRuns">
-            @foreach (var result in this.CalculateCurrentMilestoneResults())
-            {
-                <div class="mx-6">
-                    <MudText Typo="Typo.subtitle2">@($"Ziel: {result.MileStone.Location}" + (string.IsNullOrWhiteSpace(result.MileStone.ShortName) ? "" : $", Heimat von {result.MileStone.ShortName}"))</MudText>
-                    <div>
-                        <div class="progress-container" style="height: 28px">
-                            <div class="progress-bar"
-                                 style="width: @((result.Percent * 100).ToString("####0.###", CultureInfo.InvariantCulture))%;">
+    <MudExpansionPanels Style="border-style: solid; border-width: 1px" Class="mt-3">
+        <MudExpansionPanel @bind-IsExpanded="this.ShowSingleRuns">
+            <TitleContent>
+                <div class="d-flex justify-center">                    
+                    <MudText><strong>Hier aufklappen für Einzelstecken Übersicht</strong></MudText>
+                </div>
+            </TitleContent>
+            <ChildContent>
+                @foreach (var result in this.CalculateCurrentMilestoneResults())
+                {
+                    <div class="mx-6">
+                        <MudText Typo="Typo.subtitle2">@($"Ziel: {result.MileStone.Location}" + (string.IsNullOrWhiteSpace(result.MileStone.ShortName) ? "" : $", Heimat von {result.MileStone.ShortName}"))</MudText>
+                        <div>
+                            <div class="progress-container" style="height: 28px">
+                                <div class="progress-bar"
+                                     style="width: @((result.Percent * 100).ToString("####0.###", CultureInfo.InvariantCulture))%;">
+                                </div>
+                            </div>
+                            <div class="progress-text">
+                                <MudText Typo="Typo.subtitle2">@($"{result.CurrentDistance.ToString("####0.###")} von {result.MileStoneDistance.ToString("####0.###")} km")</MudText>
                             </div>
                         </div>
-                        <div class="progress-text">
-                            <MudText Typo="Typo.subtitle2">@($"{result.CurrentDistance.ToString("####0.###")} von {result.MileStoneDistance.ToString("####0.###")} km")</MudText>
-                        </div>
                     </div>
-                </div>
-            }
+                }
+            </ChildContent>
         </MudExpansionPanel>
     </MudExpansionPanels>
 
