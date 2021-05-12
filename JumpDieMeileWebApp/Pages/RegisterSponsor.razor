@@ -46,9 +46,9 @@
                                  Validation="@(this.ValidateProp<decimal?>(nameof(this.NewSponsoringEntry.ImmediateInEuro)))"
                                  Adornment="Adornment.End" AdornmentText="€" Immediate="true" />
                 
-                <MudNumericField Class="my-2" Label="Spende pro gelaufenem km" @bind-Value="this.NewSponsoringEntry.PerKmInEuro"  Variant="Variant.Outlined"
+                <MudNumericField Class="my-2" Label="Spende pro gelaufenem km" @bind-Value="this.NewSponsoringEntry.PerKmInEuro"  Variant="Variant.Outlined" Immediate="true"
                                  Adornment="Adornment.End" AdornmentText="€" Validation="@(this.ValidateProp<decimal?>(nameof(this.NewSponsoringEntry.PerKmInEuro)))"
-                                 HelperText="Der Wert gilt in € pro gelaufenem km. Beispiel: '1,5'" Immediate="true" />
+                                 HelperText="@($"Der Wert gilt in € pro gelaufenem km. {(this.NewSponsoringEntry.SponsoringMode == SponsoringMode.SingleRunner ? "Beispiel: '1,5'€ - bei 100km wären das bspw. 150€" : "Beispiel: '0,05'€ (entspricht 5ct) - bei 5000km wären das bspw. 250€")}")"  />
             </MudCardContent>
             <MudCardActions>
                 <MudButton OnClick="@this.HandleValidSubmit" Variant="Variant.Outlined" Color="Color.Primary" Class="ml-auto ma-2">Hinzufügen</MudButton>
