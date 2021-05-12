@@ -39,7 +39,7 @@
                                      Validation="@(this.ValidateProp<Runner?>(nameof(this.NewSponsoringEntry.SponsoredRunner)))"
                                      ResetValueOnEmptyText="true" CoerceText="true" MinCharacters="3" MaxItems="null" Immediate="true" Variant="Variant.Outlined"
                                      ToStringFunc="@(runner => { return runner?.FullDisplayName ?? string.Empty; })"
-                                     HelperText="Beginne den Nutzernamen des Läufers einzugeben, du bekommst dann eine Auswahl angezeigt um den Läufer auszuwählen."/>
+                                     HelperText="Beginne den Nutzernamen des Läufers einzugeben, du bekommst dann eine Auswahl angezeigt um den Läufer auszuwählen. Du kennst den Nutzernamen nicht? Dann frage beim Läufer nach."/>
                 }
                 
                 <MudNumericField Class="my-2" Label="Pauschaler Spendenbetrag" @bind-Value="this.NewSponsoringEntry.ImmediateInEuro"  Variant="Variant.Outlined"

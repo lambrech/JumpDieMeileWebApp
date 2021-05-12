@@ -18,7 +18,7 @@
                 <MudTextField id="firstName" Class="my-2" Label="Vorname" @bind-Value="this.NewRunner.FirstName" For="@(() => this.NewRunner.FirstName)" Variant="Variant.Outlined"/>
                 <MudTextField id="lastName" Class="my-2" Label="Nachname" @bind-Value="this.NewRunner.LastName" For="@(() => this.NewRunner.LastName)" Variant="Variant.Outlined"/>
                 <MudTextField id="userName" Class="my-2" Label="Nutzername" @bind-Value="this.NewRunner.Username" For="@(() => this.NewRunner.Username)" ErrorText="@this.CurrentUserNameErrorText()"
-                              Variant="Variant.Outlined" Immediate="true" HelperText="Dieser Name könnte für andere Nutzer sichtbar sein. Falls du anonym bleiben möchtest, verwende ein Pseudonym."/>
+                              Variant="Variant.Outlined" Immediate="true" HelperText="Dieser Name könnte für andere Nutzer sichtbar sein. Falls du anonym bleiben möchtest, verwende ein Pseudonym. Deine Sponsoren müssen diesen Nutzernamen angeben um dich zu unterstützen."/>
                 <MudTextField id="email" Class="my-2" Label="Email" @bind-Value="this.NewRunner.Email" For="@(() => this.NewRunner.Email)" Variant="Variant.Outlined"/>
                 <MudTextField id="location" Class="my-2" Label="Wohnort" @bind-Value="this.NewRunner.Location" For="@(() => this.NewRunner.Location)" Variant="Variant.Outlined"/>
                 <MudTextField id="postcode" Class="my-2" Label="PLZ" @bind-Value="this.NewRunner.Postcode" For="@(() => this.NewRunner.Postcode)" Variant="Variant.Outlined"/>
@@ -52,7 +52,7 @@
         </MudCardHeader>
         <MudCardContent>
             <MudTextField ReadOnly="true" Class="my-4" Label="Vollständiger Anzeigename" Value="this.RegisteredRunner?.FullDisplayName" Variant="Variant.Outlined"
-                          HelperText="Die Zeichenkette nach deinem Nutzernamen sind die ersten Zeichen deiner eindeutigen ID. Falls jemand durch einen technischen Fehler den gleichen Nutzernamen erstellen konnte wie du, hilft diese ID bei der Unterscheidung" />
+                          HelperText="Die Zeichenkette nach deinem Nutzernamen sind die ersten Zeichen deiner eindeutigen ID. Falls jemand durch einen technischen Fehler den gleichen Nutzernamen erstellen konnte wie du, hilft diese ID bei der Unterscheidung. Deine Sponsoren müssen diesen Nutzernamen angeben um dich zu unterstützen." />
             <MudTextField ReadOnly="true" Class="my-4" Label="Vorname" Value="this.RegisteredRunner?.FirstName"  Variant="Variant.Outlined"/>
             <MudTextField ReadOnly="true" Class="my-4" Label="Nachname" Value="this.RegisteredRunner?.LastName"  Variant="Variant.Outlined"/>
             <MudTextField ReadOnly="true" Class="my-4" Label="Nutzername" Value="this.RegisteredRunner?.Username" Variant="Variant.Outlined" />

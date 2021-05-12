@@ -27,10 +27,12 @@
 <MudThemeProvider Theme="this.MyCustomTheme" />
 <div class="vertical-wrap-panel" >
     <div class="horizontal-wrap-panel-center">
+        <MudTooltip Text="@($"{(RegisterRunsLiveDate > DateTime.Now ? $"Ab dem {(RegisterRunsLiveDate.ToString("dd.MM.yyyy"))} kannst du Läufe eintragen" : "")}")">
         <MudPaper Class="ma-4">
             <MudButton OnClick="@(() => { this.NavigationManager.NavigateTo(this.NavigationManager.CreateRoute(PageRoutes.RegisterRunRoute)); })"
-                       Color="Color.Secondary" Variant="Variant.Filled">Lauf eintragen</MudButton>
+                       Color="Color.Secondary" Variant="Variant.Filled" Disabled="@(RegisterRunsLiveDate > DateTime.Now)">Lauf eintragen</MudButton>
         </MudPaper>
+        </MudTooltip>
         <MudPaper Class="ma-4">
             <MudButton OnClick="@(() => { this.NavigationManager.NavigateTo(this.NavigationManager.CreateRoute(PageRoutes.RegisterRunnerRoute)); })"
                        Color="Color.Secondary" Variant="Variant.Filled">Läufer registrieren</MudButton>
@@ -51,6 +53,8 @@
 
 @code
 {
+    public static DateTime RegisterRunsLiveDate = new (2021, 5, 21);
+
     MudTheme MyCustomTheme = new MudTheme()
     {
         Palette = new Palette()
