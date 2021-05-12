@@ -29,7 +29,7 @@
         [Required(ErrorMessage = "Bitte gib das Datum an, an welchem der Lauf stattgefunden hat.")]
         public DateTime? StartTimeLocalDate { get; set; }
 
-        [Required(ErrorMessage = "Bitte gib die (ungefähre) Uhrzeit an, zu welcher du deinen Lauf begonnen hast. Eingabeformat <HH:mm>. Z.B. 17:45")]
+        [Required(ErrorMessage = "Bitte gib die (ungefähre) Uhrzeit an, zu welcher du deinen Lauf begonnen hast. Eingabeformat <HH:mm>. Z.B. 17:45. Warum Startzeit? Zur Unterscheidung mehrerer Läufe am selben Tag.")]
         public TimeSpan? StartTimeLocalTime { get; set; }
 
         public decimal? DurationInMinutes { get; set; }

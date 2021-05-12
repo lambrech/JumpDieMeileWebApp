@@ -31,7 +31,7 @@ else
                     <MudDatePicker Class="my-2" Label="Start Datum" @bind-Date="this.StartTimeLocalDate" For="@(() => this.StartTimeLocalDate)" InputVariant="Variant.Outlined"
                                    TitleDateFormat="dddd, dd MMMM" DateFormat="dd.MM.yyyy" ShowWeekNumbers="true" Color="Color.Secondary"/>
                     <OwnMudTimePicker Class="my-2" @ref="this.CurrentTimePicker" Label="Startzeit" @bind-Time="this.StartTimeLocalTime" For="@(() => this.StartTimeLocalTime)"
-                                      InputVariant="Variant.Outlined" Editable="true" Color="Color.Secondary" HelperText="Eingabeformat <HH:mm>. Z.B. 17:45"/>
+                                      InputVariant="Variant.Outlined" Editable="true" Color="Color.Secondary" HelperText="Eingabeformat <HH:mm>. Z.B. 17:45. Warum Startzeit? Zur Unterscheidung mehrerer Läufe am selben Tag."/>
                     <MudNumericField Class="my-2" Label="Dauer (Optional)" @bind-Value="this.DurationInMinutes" Variant="Variant.Outlined"
                                      Adornment="Adornment.End" AdornmentText="min" HelperText="Optional kannst du deine Laufdauer in Minuten eingeben" Min="0" Immediate="true"/>
                 </MudCardContent>
