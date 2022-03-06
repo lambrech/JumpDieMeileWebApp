@@ -19,17 +19,20 @@
         [Inject]
         public IPersistenceProvider PersistenceProvider { get; private set; } = null!;
 
-        [Required(ErrorMessage = "Bitte wähle den Läufer aus, für welchen dieser Lauf gemeldet werden soll. Kannst du den gesuchten Namen nicht finden, muss du diesen Läufer vermutlich erst noch registrieren.")]
+        [Required(ErrorMessage = "Bitte wähle den Sportler aus, für welchen diese Aktivität gemeldet werden soll. Kannst du den gesuchten Namen nicht finden, muss du diesen Sportler vermutlich erst noch registrieren.")]
         public Runner? SelectedRunner { get; set; }
+
+        [Required(ErrorMessage = "Es muss eine Sportart ausgewählt werden.")]
+        public RunMode? SelectedRunMode { get; set; }
 
         [Required(ErrorMessage = "Bitte gebe einen validen Zahlenwert für die Strecke an.")]
         [Range(0, 500, ErrorMessage = "Der angegebene Wert muss zwischen 0 und 500km liegen.")]
         public double? Distance { get; set; }
 
-        [Required(ErrorMessage = "Bitte gib das Datum an, an welchem der Lauf stattgefunden hat.")]
+        [Required(ErrorMessage = "Bitte gib das Datum an, an welchem deine Aktivität stattgefunden hat.")]
         public DateTime? StartTimeLocalDate { get; set; }
 
-        [Required(ErrorMessage = "Bitte gib die (ungefähre) Uhrzeit an, zu welcher du deinen Lauf begonnen hast. Eingabeformat <HH:mm>. Z.B. 17:45. Warum Startzeit? Zur Unterscheidung mehrerer Läufe am selben Tag.")]
+        [Required(ErrorMessage = "Bitte gib die (ungefähre) Uhrzeit an, zu welcher du deine Aktivität begonnen hast. Eingabeformat <HH:mm>. Z.B. 17:45. Warum Startzeit? Zur Unterscheidung mehrerer Strecken die am selben Tag zurückgelegt wurden.")]
         public TimeSpan? StartTimeLocalTime { get; set; }
 
         public decimal? DurationInMinutes { get; set; }
@@ -61,13 +64,14 @@
 
         private async Task HandleValidSubmit()
         {
-            this.CurrentForm.Validate();
+            await this.CurrentForm.Validate();
             if (!this.CurrentForm.IsValid)
             {
                 return;
             }
 
             if ((this.SelectedRunner != null) &&
+                this.SelectedRunMode.HasValue &&
                 this.Distance.HasValue &&
                 this.StartTimeLocalDate.HasValue &&
                 this.StartTimeLocalTime.HasValue)
@@ -75,6 +79,7 @@
                 var localTime = this.StartTimeLocalDate.Value.Add(this.StartTimeLocalTime.Value);
                 this.RegisteredRun = new Run(
                     this.SelectedRunner,
+                    this.SelectedRunMode,
                     (decimal)this.Distance.Value,
                     localTime.ToUniversalTime(),
                     TryGetDurationTimespan(this.DurationInMinutes));

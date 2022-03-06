@@ -44,7 +44,7 @@
         <MudButton Style="align-self: center" Variant="Variant.Outlined" Class="mb-6" OnClick="@this.StartCalculateCurrentSponsoringState">Aktuellen Spendenstand berechnen</MudButton>
         @if (this.CalculateCurrentSponsoringStateTaskCompletion == null)
         {
-            <MudText>Abhängig von der Anzahl der Läufe und Sponsoren kann dies unterschiedlich lange dauern. Während der Berechnung lässt sich die Seite nicht richtig bedienen. (Auch dein Browser hat einen Einfluss auf die Berechnungszeit. Chrome scheint hierbei beispielsweise schneller zu sein als Firefox).</MudText>
+            <MudText>Abhängig von der Anzahl der eingetragenen Aktivitäten und Sponsoren kann dies unterschiedlich lange dauern. Während der Berechnung lässt sich die Seite nicht richtig bedienen. (Auch dein Browser hat einen Einfluss auf die Berechnungszeit. Chrome scheint hierbei beispielsweise schneller zu sein als Firefox).</MudText>
         }
         
         @if (this.CalculateCurrentSponsoringStateTaskCompletion?.IsNotCompleted ?? false)

@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Jump die Meile 2021</title>
+    <title>Jump die Meile 2022</title>
     <base href="/" />
     <link href="css/app.css" rel="stylesheet" />
     <link href="JumpDieMeileWebApp.styles.css" rel="stylesheet" />
@@ -17,7 +17,7 @@
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
 </head>
 
-<body id="jdm_wa_body_2021" style="font-family: Roboto Condensed,sans-serif;">
+<body id="jdm_wa_body_2022" style="font-family: Roboto Condensed,sans-serif;">
     <div id="app">Loading...</div>
 
 <div id="blazor-error-ui">
@@ -31,15 +31,15 @@
     let height;
 
     const sendPostMessage = () => {
-        if (height !== document.getElementById('jdm_wa_body_2021').offsetHeight) {
-            height = document.getElementById('jdm_wa_body_2021').offsetHeight;
+        if (height !== document.getElementById('jdm_wa_body_2022').offsetHeight) {
+            height = document.getElementById('jdm_wa_body_2022').offsetHeight;
             window.parent.postMessage({
                 frameHeight: height
             }, '*');
         }
     }
 
-    elem = document.getElementById("jdm_wa_body_2021");
+    elem = document.getElementById("jdm_wa_body_2022");
 
     let resizeObserver = new ResizeObserver(() => {
         sendPostMessage();

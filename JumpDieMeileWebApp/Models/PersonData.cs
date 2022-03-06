@@ -65,8 +65,24 @@
 
             return mode.Value switch
             {
-                SponsoringMode.SingleRunner => "Einen Läufer unterstützen",
-                SponsoringMode.WholeProject => "Das Projekt 'Homecoming' unterstützen",
+                SponsoringMode.SingleRunner => "Einen Sportler unterstützen",
+                SponsoringMode.WholeProject => "Das Projekt 'Follow us around' unterstützen",
+                _ => throw new ArgumentOutOfRangeException()
+            };
+        }
+
+        public static string ToDisplayString(this RunMode? mode)
+        {
+            // should not be possible - but whatever
+            if (mode == null)
+            {
+                return "Keine Angabe";
+            }
+
+            return mode.Value switch
+            {
+                RunMode.Foot => "Laufen",
+                RunMode.Bike => "Fahrrad",
                 _ => throw new ArgumentOutOfRangeException()
             };
         }

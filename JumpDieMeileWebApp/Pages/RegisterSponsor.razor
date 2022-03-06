@@ -28,6 +28,8 @@
                 </MudSelect>
                 
                 <MudText Class="mt-4 mb-2">Sponsoring Angaben:</MudText>
+                <MudText Typo="Typo.caption" Class="mt-4 mb-2">Kilometer die mit dem Fahrrad zurückgelegt wurden, zählen zur Berechnung der Spendensumme und des Streckenfortschritts mit einem Drittel.</MudText>
+                <MudText Typo="Typo.caption" Class="mt-4 mb-2">(Beispiel: 30km Fahrrad fahren entspricht einer Strecke von 10km zur Berechnung deiner Spende.)</MudText>
                 <MudSelect id="sponsoringMode" Label="Unterstützungs-Modus" @bind-Value="this.NewSponsoringEntry.SponsoringMode" For="@(() => this.NewSponsoringEntry.SponsoringMode)" Variant="Variant.Outlined">
                     <MudSelectItem Value="@((SponsoringMode?)SponsoringMode.SingleRunner)">@DisplayExtensions.ToDisplayString(SponsoringMode.SingleRunner)</MudSelectItem>
                     <MudSelectItem Value="@((SponsoringMode?)SponsoringMode.WholeProject)">@DisplayExtensions.ToDisplayString(SponsoringMode.WholeProject)</MudSelectItem>
@@ -35,20 +37,20 @@
                 
                 @if (this.NewSponsoringEntry.SponsoringMode == SponsoringMode.SingleRunner)
                 {
-                    <MudAutocomplete Class="my-2" Label="Läufer" @bind-Value="this.NewSponsoringEntry.SponsoredRunner" SearchFunc="this.RunnerSearchFunc"
+                    <MudAutocomplete Class="my-2" Label="Sportler" @bind-Value="this.NewSponsoringEntry.SponsoredRunner" SearchFunc="this.RunnerSearchFunc"
                                      Validation="@(this.ValidateProp<Runner?>(nameof(this.NewSponsoringEntry.SponsoredRunner)))"
                                      ResetValueOnEmptyText="true" CoerceText="true" MinCharacters="3" MaxItems="null" Immediate="true" Variant="Variant.Outlined"
                                      ToStringFunc="@(runner => { return runner?.FullDisplayName ?? string.Empty; })"
-                                     HelperText="Beginne den Nutzernamen des Läufers einzugeben, du bekommst dann eine Auswahl angezeigt um den Läufer auszuwählen. Du kennst den Nutzernamen nicht? Dann frage beim Läufer nach."/>
+                                     HelperText="Beginne den Nutzernamen des Sportlers einzugeben, du bekommst dann eine Auswahl angezeigt um den Sportler auszuwählen. Du kennst den Nutzernamen nicht? Dann frage beim Sportler nach."/>
                 }
                 
                 <MudNumericField Class="my-2" Label="Pauschaler Spendenbetrag" @bind-Value="this.NewSponsoringEntry.ImmediateInEuro"  Variant="Variant.Outlined"
                                  Validation="@(this.ValidateProp<decimal?>(nameof(this.NewSponsoringEntry.ImmediateInEuro)))"
                                  Adornment="Adornment.End" AdornmentText="€" Immediate="true" />
                 
-                <MudNumericField Class="my-2" Label="Spende pro gelaufenem km" @bind-Value="this.NewSponsoringEntry.PerKmInEuro"  Variant="Variant.Outlined" Immediate="true"
+                <MudNumericField Class="my-2" Label="Spende pro km" @bind-Value="this.NewSponsoringEntry.PerKmInEuro"  Variant="Variant.Outlined" Immediate="true"
                                  Adornment="Adornment.End" AdornmentText="€" Validation="@(this.ValidateProp<decimal?>(nameof(this.NewSponsoringEntry.PerKmInEuro)))"
-                                 HelperText="@($"Der Wert gilt in € pro gelaufenem km. {(this.NewSponsoringEntry.SponsoringMode == SponsoringMode.SingleRunner ? "Beispiel: '1,5'€ - bei 100km wären das bspw. 150€" : "Beispiel: '0,05'€ (entspricht 5ct) - bei 5000km wären das bspw. 250€")}")"  />
+                                 HelperText="@($"Der Wert gilt in € pro erreichtem km. {(this.NewSponsoringEntry.SponsoringMode == SponsoringMode.SingleRunner ? "Beispiel: '1,5'€ - bei 100km wären das bspw. 150€" : "Beispiel: '0,05'€ (entspricht 5ct) - bei 5000km wären das bspw. 250€")}")"  />
             </MudCardContent>
             <MudCardActions>
                 <MudButton OnClick="@this.HandleValidSubmit" Variant="Variant.Outlined" Color="Color.Primary" Class="ml-auto ma-2">Hinzufügen</MudButton>
@@ -82,7 +84,7 @@
             
             @if (this.RegisteredSponsoringEntry?.SponsoredRunner != null)
             {
-                <MudTextField ReadOnly="true" Class="my-4" Label="Läufer Anzeigename" Value="this.RegisteredSponsoringEntry?.SponsoredRunner.FullDisplayName"  Variant="Variant.Outlined"/>
+                <MudTextField ReadOnly="true" Class="my-4" Label="Sportler Anzeigename" Value="this.RegisteredSponsoringEntry?.SponsoredRunner.FullDisplayName"  Variant="Variant.Outlined"/>
             }
             @if (this.RegisteredSponsoringEntry is {ImmediateInEuro: { } })
             {
@@ -90,16 +92,16 @@
             }
             @if (this.RegisteredSponsoringEntry is {PerKmInEuro: { } })
             {
-                <MudTextField ReadOnly="true" Class="my-4" Label="Spende pro gelaufenem km" Value="@($"{this.RegisteredSponsoringEntry.PerKmInEuro.Value} €")"  Variant="Variant.Outlined"/>
+                <MudTextField ReadOnly="true" Class="my-4" Label="Spende pro km" Value="@($"{this.RegisteredSponsoringEntry.PerKmInEuro.Value} €")"  Variant="Variant.Outlined"/>
             }
             
             <MudText Typo="Typo.h6">Danke für die Unterstützung. Deine Angaben wurden zur Kontrolle per Mail auch an '@(this.RegisteredSponsoringEntry?.Email)' versendet.</MudText>
         </MudCardContent>
         <MudCardActions Class="d-flex flex-wrap justify-center">
             <MudButton  Class="ma-4" OnClick="@(async () => { this.NavigationManager.NavigateTo(this.NavigationManager.CreateRoute(PageRoutes.RegisterRunRoute)); })"
-                        Variant="Variant.Outlined">Einen Lauf eintragen</MudButton>
+                        Variant="Variant.Outlined">Aktivität eintragen</MudButton>
             <MudButton Class="ma-4" OnClick="@(async () => { this.NavigationManager.NavigateTo(this.NavigationManager.CreateRoute(PageRoutes.RegisterRunnerRoute)); })"
-                       Variant="Variant.Outlined">Läufer registrieren</MudButton>
+                       Variant="Variant.Outlined">Sportler registrieren</MudButton>
             <MudButton Class="ma-4" OnClick="@(async () => { await this.OnInitializedAsync(); this.StateHasChanged(); })" Variant="Variant.Outlined">Weiteren Sponsoring Eintrag hinzufügen</MudButton>
         </MudCardActions>
     </MudCard>

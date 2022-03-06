@@ -11,7 +11,7 @@
         <MudCard Outlined="true" Elevation="4">
             <MudCardHeader>
                 <CardHeaderContent>
-                    <MudText Typo="Typo.h6">Neuen Läufer registrieren</MudText>
+                    <MudText Typo="Typo.h6">Neuen Sportler registrieren</MudText>
                 </CardHeaderContent>
             </MudCardHeader>
             <MudCardContent>
@@ -47,7 +47,7 @@
     <MudCard Outlined="true" Elevation="4">
         <MudCardHeader>
             <CardHeaderContent>
-                <MudText Typo="Typo.h6">Danke für deine Anmeldung.<br />Viel Spaß beim Laufen.</MudText>
+                <MudText Typo="Typo.h6">Danke für deine Anmeldung.<br />Viel Spaß beim Aktiv sein.</MudText>
             </CardHeaderContent>
         </MudCardHeader>
         <MudCardContent>
@@ -68,9 +68,9 @@
             
         </MudCardContent>
         <MudCardActions Class="d-flex flex-wrap justify-center">
-            <MudButton  Class="ma-4" OnClick="@(async () => { await this.OnInitializedAsync(); this.StateHasChanged(); })" Variant="Variant.Outlined">Weiteren Läufer registrieren</MudButton>
+            <MudButton  Class="ma-4" OnClick="@(async () => { await this.OnInitializedAsync(); this.StateHasChanged(); })" Variant="Variant.Outlined">Weiteren Sportler registrieren</MudButton>
             <MudButton  Class="ma-4" OnClick="@(async () => { this.NavigationManager.NavigateTo(this.NavigationManager.CreateRoute(PageRoutes.RegisterRunRoute)); })"
-                        Variant="Variant.Outlined">Einen Lauf eintragen</MudButton>
+                        Variant="Variant.Outlined">Eine Aktivität eintragen</MudButton>
             <MudButton  Class="ma-4" OnClick="@(async () => { this.NavigationManager.NavigateTo(this.NavigationManager.CreateRoute(PageRoutes.RegisterSponsorRoute)); })"
                         Variant="Variant.Outlined">Sponsoring Eintrag hinzufügen</MudButton>
         </MudCardActions>

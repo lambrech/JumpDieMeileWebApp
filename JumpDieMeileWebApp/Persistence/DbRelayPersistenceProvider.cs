@@ -101,11 +101,12 @@
             try
             {
                 var sql =
-                    @$"INSERT INTO `{RunTableName}` (`Id`, `ModelVersion`, `CreationTimestampUtc`, `Runner`, `DistanceKm`, `StartTimestampUtc`, `Duration`) VALUES
+                    @$"INSERT INTO `{RunTableName}` (`Id`, `ModelVersion`, `CreationTimestampUtc`, `Runner`, `RunMode`, `DistanceKm`, `StartTimestampUtc`, `Duration`) VALUES
 ('{MySqlHelper.EscapeString(run.Id.ToString())}',
 {run.ModelVersion},
 '{MySqlHelper.EscapeString(JsonSerializer.Serialize(run.CreationTimestampUtc).Trim('\"'))}',
 '{MySqlHelper.EscapeString(run.Runner?.Id.ToString())}',
+'{(run.RunMode.HasValue ? (int)run.RunMode.Value : "NULL")}',
 {run.DistanceKm.ToString(CultureInfo.InvariantCulture)},
 '{MySqlHelper.EscapeString(JsonSerializer.Serialize(run.StartTimestampUtc).Trim('\"'))}',
 {run.Duration?.Ticks.ToString(CultureInfo.InvariantCulture) ?? "NULL"});";

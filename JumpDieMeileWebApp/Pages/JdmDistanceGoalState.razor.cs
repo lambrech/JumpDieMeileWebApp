@@ -20,9 +20,9 @@
 
         public JdmDistanceGoalState()
         {
-            this.MileStones.Add(new JdmMileStone("Bühlenhausen", "89180", "Theo Karl Burkhardt", "Theo", 145, (decimal)48.45898, (decimal)9.78));
-            this.MileStones.Add(new JdmMileStone("Görlitz", "02826", "Paul Eric Hoffmann", "Paul", 945, (decimal)51.14683, (decimal)14.97889));
-            this.MileStones.Add(new JdmMileStone("Graben-Neudorf", "76676", "Fiona Schneider", "Fiona", 1626, (decimal)49.16232, (decimal)8.48980));
+            this.MileStones.Add(new JdmMileStone("Buju (Ettlingen)", "", "", "", 12, (decimal)48.937939, (decimal)8.393441));
+            this.MileStones.Add(new JdmMileStone("MAXX-Camp", "", "", "", 186, (decimal)47.928595, (decimal)9.618834));
+            this.MileStones.Add(new JdmMileStone("Gabrovo", "", "", "", 1913, (decimal)42.869873, (decimal)25.314847));
             this.MileStones.Add(new JdmMileStone("Kodersdorf", "02923", "Ian Haupt", "Ian", 2298, (decimal)51.23606, (decimal)14.89476));
             this.MileStones.Add(new JdmMileStone("Korntal", "70825", "Niklas Liesenfeld", "Niki", 3020, (decimal)48.85555, (decimal)9.09520));
             this.MileStones.Add(new JdmMileStone("Mulsum", "27639", "Samuel Breitenmoser", "Sam", 3757, (decimal)53.66955, (decimal)8.54713));

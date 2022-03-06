@@ -66,7 +66,7 @@
 
         private async Task HandleValidSubmit()
         {
-            this.CurrentForm.Validate();
+            await this.CurrentForm.Validate();
             if (!this.CurrentForm.IsValid)
             {
                 return;

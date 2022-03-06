@@ -29,7 +29,7 @@
                     return new PersistResultError
                     {
                         ErrorMessage =
-                            "Ein Läufer mit gleicher ID existiert bereits! Das sollte technisch nicht möglich sein ...  Bitte lade die Seite neu und versuche es nochmal. Sorry!"
+                            "Ein Sportler mit gleicher ID existiert bereits! Das sollte technisch nicht möglich sein ...  Bitte lade die Seite neu und versuche es nochmal. Sorry!"
                     };
                 }
 

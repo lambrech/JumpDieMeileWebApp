@@ -39,7 +39,7 @@
                     if (context.MemberName is nameof(SponsoredRunner))
                     {
                         return (obj.SponsoringMode == Models.SponsoringMode.SingleRunner && obj.SponsoredRunner == null)
-                            ? new ValidationResult("Es muss ein Läufer angegeben werden.")
+                            ? new ValidationResult("Es muss ein Sportler angegeben werden.")
                             : null;
                     }
 

@@ -1,4 +1,5 @@
-﻿<style>
+﻿@using JumpDieMeileWebApp.Models
+<style>
     .display-none {
         display: none;
     }
@@ -7,7 +8,7 @@
 @if (MainLayout.RegisterRunsLiveDate > DateTime.Now)
 {
     <div class="@(this.RunRegistered ? "display-none d-flex flex-wrap justify-center" : "d-flex flex-wrap justify-center")" style="min-width: 300px; width: 70%;">
-        <MudText Typo="Typo.h4">Läufe können erst ab dem @MainLayout.RegisterRunsLiveDate.ToString("dd.MM.yyyy") eingetragen werden.</MudText>
+        <MudText Typo="Typo.h4">Aktivitäten können erst ab dem @MainLayout.RegisterRunsLiveDate.ToString("dd.MM.yyyy") eingetragen werden.</MudText>
     </div>
 }
 else
@@ -18,22 +19,26 @@ else
             <MudCard Outlined="true" Elevation="4">
                 <MudCardHeader>
                     <CardHeaderContent>
-                        <MudText Typo="Typo.h6">Neuen Lauf hinzufügen</MudText>
+                        <MudText Typo="Typo.h6">Neue Aktivität hinzufügen</MudText>
                     </CardHeaderContent>
                 </MudCardHeader>
                 <MudCardContent>
-                    <MudAutocomplete Class="my-2" Label="Läufer" @bind-Value="this.SelectedRunner" For="(() => this.SelectedRunner)" SearchFunc="this.RunnerSearchFunc"
+                    <MudAutocomplete Class="my-2" Label="Sportler" @bind-Value="this.SelectedRunner" For="(() => this.SelectedRunner)" SearchFunc="this.RunnerSearchFunc"
                                      ResetValueOnEmptyText="true" CoerceText="true" MinCharacters="3" MaxItems="null" Immediate="true" Variant="Variant.Outlined"
                                      ToStringFunc="@(runner => { return runner?.FullDisplayName ?? string.Empty; })"
-                                     HelperText="Beginne deinen Nutzernamen einzugeben, du bekommst dann eine Auswahl angezeigt um deinen Nutzer auszuwählen. Kannst du den gesuchten Namen nicht finden, muss du diesen Läufer vermutlich erst noch registrieren."/>
+                                     HelperText="Beginne deinen Nutzernamen einzugeben, du bekommst dann eine Auswahl angezeigt um deinen Nutzer auszuwählen. Kannst du den gesuchten Namen nicht finden, muss du diesen Sportler vermutlich erst noch registrieren."/>
+                    <MudSelect id="runMode" Label="Sportart" @bind-Value="this.SelectedRunMode" For="@(() => this.SelectedRunMode)"  Variant="Variant.Outlined" >
+                        <MudSelectItem Value="@((RunMode?)RunMode.Foot)" >@DisplayExtensions.ToDisplayString(RunMode.Foot)</MudSelectItem>
+                        <MudSelectItem Value="@((RunMode?)RunMode.Bike)" >@DisplayExtensions.ToDisplayString(RunMode.Bike)</MudSelectItem>
+                    </MudSelect>
                     <MudNumericField Class="my-2" Label="Strecke" @bind-Value="this.Distance" Variant="Variant.Outlined" Min="0" Max="500" For="(() => this.Distance)"
                                      Adornment="Adornment.End" AdornmentText="km" HelperText="Bitte gib deine Strecke in km ein, z.B. '7,48'" Immediate="true"/>
                     <MudDatePicker Class="my-2" Label="Start Datum" @bind-Date="this.StartTimeLocalDate" For="@(() => this.StartTimeLocalDate)" InputVariant="Variant.Outlined"
                                    TitleDateFormat="dddd, dd MMMM" DateFormat="dd.MM.yyyy" ShowWeekNumbers="true" Color="Color.Secondary"/>
                     <OwnMudTimePicker Class="my-2" @ref="this.CurrentTimePicker" Label="Startzeit" @bind-Time="this.StartTimeLocalTime" For="@(() => this.StartTimeLocalTime)"
-                                      InputVariant="Variant.Outlined" Editable="true" Color="Color.Secondary" HelperText="Eingabeformat <HH:mm>. Z.B. 17:45. Warum Startzeit? Zur Unterscheidung mehrerer Läufe am selben Tag."/>
+                                      InputVariant="Variant.Outlined" Editable="true" Color="Color.Secondary" HelperText="Eingabeformat <HH:mm>. Z.B. 17:45. Warum Startzeit? Zur Unterscheidung mehrerer Strecken die am selben Tag zurückgelegt wurden."/>
                     <MudNumericField Class="my-2" Label="Dauer (Optional)" @bind-Value="this.DurationInMinutes" Variant="Variant.Outlined"
-                                     Adornment="Adornment.End" AdornmentText="min" HelperText="Optional kannst du deine Laufdauer in Minuten eingeben" Min="0" Immediate="true"/>
+                                     Adornment="Adornment.End" AdornmentText="min" HelperText="Optional kannst du deine Aktivitätsdauer in Minuten eingeben" Min="0" Immediate="true"/>
                 </MudCardContent>
                 <MudCardActions>
                     <MudButton OnClick="@this.HandleValidSubmit" Variant="Variant.Outlined" Color="Color.Primary" Class="ml-auto ma-2">Hinzufügen</MudButton>
@@ -55,7 +60,8 @@ else
                 </CardHeaderContent>
             </MudCardHeader>
             <MudCardContent>
-                <MudTextField ReadOnly="true" Class="my-4" Label="Läufer Anzeigename" Value="this.RegisteredRun?.Runner?.FullDisplayName" Variant="Variant.Outlined"/>
+                <MudTextField ReadOnly="true" Class="my-4" Label="Sportler Anzeigename" Value="this.RegisteredRun?.Runner?.FullDisplayName" Variant="Variant.Outlined"/>
+                <MudTextField ReadOnly="true" Class="my-4" Label="Sportart" Value="this.RegisteredRun?.RunMode.ToDisplayString()" Variant="Variant.Outlined"/>
                 <MudTextField ReadOnly="true" Class="my-4" Label="Strecke" Value="@($"{this.RegisteredRun?.DistanceKm} km")" Variant="Variant.Outlined"/>
                 <MudTextField ReadOnly="true" Class="my-4" Label="Start Datum" Value="@(this.RegisteredRun?.StartTimestampUtc.ToLocalTime().ToString("dd.MM.yyyy"))" Variant="Variant.Outlined"/>
                 <MudTextField ReadOnly="true" Class="my-4" Label="Startzeit" Value="@($"{this.RegisteredRun?.StartTimestampUtc.ToLocalTime().ToString("HH:mm")} Uhr")" Variant="Variant.Outlined"/>
@@ -66,7 +72,7 @@ else
                 }
             </MudCardContent>
             <MudCardActions Class="d-flex flex-wrap justify-center">
-                <MudButton Class="ma-4" OnClick="@this.Reset" Variant="Variant.Outlined">Weiteren Lauf eintragen</MudButton>
+                <MudButton Class="ma-4" OnClick="@this.Reset" Variant="Variant.Outlined">Weitere Aktivität eintragen</MudButton>
             </MudCardActions>
         </MudCard>
 
