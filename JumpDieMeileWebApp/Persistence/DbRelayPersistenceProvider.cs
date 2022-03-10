@@ -276,7 +276,8 @@
                     return 0;
                 }
 
-                var runsSumSql = $"SELECT SUM(DistanceKm) as `sum` FROM {RunTableName}";
+                //var runsSumSql = $"SELECT SUM(DistanceKm) as `sum` FROM {RunTableName}"; // 2021 was easy ...
+                var runsSumSql = $"SELECT (SELECT (SELECT SUM(DistanceKm) FROM {RunTableName} WHERE RunMode = 1)/3)+(SELECT SUM(DistanceKm) FROM {RunTableName} WHERE RunMode = 0) as `sum`";
                 var queryResultSum = await QuerySqlAsync(runsSumSql);
 
                 var runsSum = JsonSerializerExtensions.DeserializeAnonymousType(queryResultSum.Trim().TrimStart('[').TrimEnd(']'), new { sum = (decimal)0 })

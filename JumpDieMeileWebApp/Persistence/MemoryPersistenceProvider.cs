@@ -77,7 +77,7 @@
         public async Task<decimal> GetDistanceSumOfAllRuns()
         {
             await Task.Delay(0);
-            return this.persistedRuns.Sum(x => x.DistanceKm);
+            return this.persistedRuns.Sum(x => x.RunMode == RunMode.Bike ? x.DistanceKm / 3 : x.DistanceKm);
         }
     }
 }

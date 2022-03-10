@@ -64,9 +64,9 @@
 
             var dist = this.TotalDistance;
 
-            var runnersRunsDict = this.Runs.Where(x => x.Runner != null)
+            var runnersRunsDistanceDict = this.Runs.Where(x => x.Runner != null)
                                       .GroupBy(x => x.Runner)
-                                      .ToDictionary(x => x.Key!, x => x.Sum(run => run.DistanceKm));
+                                      .ToDictionary(x => x.Key!, x => x.Sum(run => run.RunMode == RunMode.Bike ? run.DistanceKm / 3 : run.DistanceKm));
 
             var allEuros = (decimal)0;
             foreach (var sponsoringEntry in this.SponsoringEntries)
@@ -74,16 +74,16 @@
                 switch (sponsoringEntry.SponsoringMode)
                 {
                     case SponsoringMode.SingleRunner:
-                        if ((sponsoringEntry.SponsoredRunner != null) && runnersRunsDict.TryGetValue(sponsoringEntry.SponsoredRunner, out var runs))
+                        if ((sponsoringEntry.SponsoredRunner != null) && runnersRunsDistanceDict.TryGetValue(sponsoringEntry.SponsoredRunner, out var runsDistance))
                         {
-                            if (sponsoringEntry.ImmediateInEuro.HasValue && (runs > 0))
+                            if (sponsoringEntry.ImmediateInEuro.HasValue && (runsDistance > 0))
                             {
                                 allEuros += sponsoringEntry.ImmediateInEuro.Value;
                             }
 
                             if (sponsoringEntry.PerKmInEuro.HasValue)
                             {
-                                allEuros += runs * sponsoringEntry.PerKmInEuro.Value;
+                                allEuros += runsDistance * sponsoringEntry.PerKmInEuro.Value;
                             }
                         }
 
