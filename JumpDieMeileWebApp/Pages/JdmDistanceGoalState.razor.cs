@@ -20,20 +20,18 @@
 
         public JdmDistanceGoalState()
         {
-            this.MileStones.Add(new JdmMileStone("Buju (Ettlingen)", "", "", "", 12, (decimal)48.937939, (decimal)8.393441));
-            this.MileStones.Add(new JdmMileStone("MAXX-Camp", "", "", "", 186, (decimal)47.928595, (decimal)9.618834));
-            this.MileStones.Add(new JdmMileStone("Gabrovo", "", "", "", 1913, (decimal)42.869873, (decimal)25.314847));
-            this.MileStones.Add(new JdmMileStone("Kodersdorf", "02923", "Ian Haupt", "Ian", 2298, (decimal)51.23606, (decimal)14.89476));
-            this.MileStones.Add(new JdmMileStone("Korntal", "70825", "Niklas Liesenfeld", "Niki", 3020, (decimal)48.85555, (decimal)9.09520));
-            this.MileStones.Add(new JdmMileStone("Mulsum", "27639", "Samuel Breitenmoser", "Sam", 3757, (decimal)53.66955, (decimal)8.54713));
-            this.MileStones.Add(new JdmMileStone("Mutschelbach", "76307", "Lisa Henning", "Lisa", 4438, (decimal)48.94367, (decimal)8.53407));
-            this.MileStones.Add(new JdmMileStone("Schemmerhausen", "51580", "Luca Brecht", "Luca", 4755, (decimal)50.95089, (decimal)7.65577));
-            this.MileStones.Add(new JdmMileStone("Solingen", "42659", "Joschua Erbe", "Joshua", 5381, (decimal)51.16558, (decimal)7.08893));
-            this.MileStones.Add(new JdmMileStone("Walddorfhäslach", "72141", "Marilena Müller", "Leni", 5809, (decimal)48.58861, (decimal)9.17842));
-            this.MileStones.Add(new JdmMileStone("Warendorf", "48231", "Simon Eggersmann", "Simon", 6333, (decimal)51.95007, (decimal)7.98484));
-            this.MileStones.Add(new JdmMileStone("Wiesa", "02923", "Luise Liebscher", "Luise", 7399, (decimal)51.22667, (decimal)14.85877));
-            this.MileStones.Add(new JdmMileStone("Jerusalem", "", "", "", 12020, (decimal)31.77651, (decimal)35.22888));
-            this.MileStones.Add(new JdmMileStone("JUMP WG", "", "", "", 16000, (decimal)49.01083, (decimal)8.37252));
+            this.MileStones.Add(new JdmMileStone("Buju (Ettlingen)", "", "", "", 11.5m, (decimal)48.937939, (decimal)8.393441));
+            this.MileStones.Add(new JdmMileStone("MAXX-Camp", "", "", "", 198m, (decimal)47.928595, (decimal)9.618834));
+            this.MileStones.Add(new JdmMileStone("Gabrovo", "", "", "", 2111m, (decimal)42.869873, (decimal)25.314847));
+            this.MileStones.Add(new JdmMileStone("Christival Erfurt", "", "", "", 4184m, (decimal)50.977181, (decimal)11.023781));
+            this.MileStones.Add(new JdmMileStone("Mitarbeiterwochenende (Wildberg)", "", "", "", 4578.2m, (decimal)48.624101, (decimal)8.748582));
+            this.MileStones.Add(new JdmMileStone("Spanien (Valencia)", "", "", "", 6123.4m, (decimal)39.4752036, (decimal)-0.3755116));
+            this.MileStones.Add(new JdmMileStone("CVJM Jubiläum (Europapark)", "", "", "", 7714.4m, (decimal)48.268324, (decimal)7.722204));
+            this.MileStones.Add(new JdmMileStone("Altenkirchen", "", "", "", 8042.4m, (decimal)50.687365, (decimal)7.645876));
+            this.MileStones.Add(new JdmMileStone("Kirche Kunterbunt", "", "", "", 8304.6m, (decimal)49.2465193, (decimal)8.6882689));
+            this.MileStones.Add(new JdmMileStone("Unteröwisheim", "", "", "", 8373.7m, (decimal)49.142526, (decimal)8.672482));
+            this.MileStones.Add(new JdmMileStone("Kodersdorf", "", "", "", 8997.6m, (decimal)51.229676, (decimal)14.893017));
+            this.MileStones.Add(new JdmMileStone("JUMP WG", "", "", "", 9591.6m, (decimal)49.01083, (decimal)8.37252));
         }
 
         [Parameter]

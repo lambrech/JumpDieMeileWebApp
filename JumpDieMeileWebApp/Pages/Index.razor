@@ -58,11 +58,11 @@
             <div>
                 <div class="progress-container">
                     <div class="progress-bar" 
-                        style="width: @((this.CurrentEuros / (decimal)10000 * (decimal)100).ToString("####0.###", CultureInfo.InvariantCulture))%;">
+                        style="width: @((this.CurrentEuros / (decimal)6000 * (decimal)100).ToString("####0.###", CultureInfo.InvariantCulture))%;">
                     </div>
                 </div>
                 <div class="progress-text">
-                    <MudText Typo="Typo.h6">@(this.CurrentEuros.ToString("####0.###")) von 10.000€</MudText>
+                    <MudText Typo="Typo.h6">@(this.CurrentEuros.ToString("####0.###")) von 6.000€</MudText>
                 </div>
             </div>
         }
