@@ -32,7 +32,7 @@ else
                         <MudSelectItem Value="@((RunMode?)RunMode.Bike)" >@DisplayExtensions.ToDisplayString(RunMode.Bike)</MudSelectItem>
                     </MudSelect>
                     <MudNumericField Class="my-2" Label="Strecke" @bind-Value="this.Distance" Variant="Variant.Outlined" Min="0" Max="500" For="(() => this.Distance)"
-                                     Adornment="Adornment.End" AdornmentText="km" HelperText="Bitte gib deine Strecke in km ein, z.B. '7,48'" Immediate="true"/>
+                                     Adornment="Adornment.End" AdornmentText="km" HelperText="Bitte gib deine vollständige Strecke in km ein, z.B. '7,48'. Hast du deine Strecke mit dem Fahrrad zurückgelegt dann musst du diese NICHT dritteln. Dies wird in der Berechenung automatisch geamcht." Immediate="true"/>
                     <MudDatePicker Class="my-2" Label="Start Datum" @bind-Date="this.StartTimeLocalDate" For="@(() => this.StartTimeLocalDate)" InputVariant="Variant.Outlined"
                                    TitleDateFormat="dddd, dd MMMM" DateFormat="dd.MM.yyyy" ShowWeekNumbers="true" Color="Color.Secondary"/>
                     <OwnMudTimePicker Class="my-2" @ref="this.CurrentTimePicker" Label="Startzeit" @bind-Time="this.StartTimeLocalTime" For="@(() => this.StartTimeLocalTime)"

@@ -4,14 +4,15 @@
 
     <div class="my-6 mx-4">
         <MudText Typo="Typo.h6">Gesamt Streckenziel</MudText>
+        <MudText Typo="Typo.caption">Kilometer die mit dem Fahrrad zurückgelegt wurden, zählen zur Berechnung des Streckenfortschritts mit einem Drittel.</MudText>
         <div>
             <div class="progress-container">
                 <div class="progress-bar" 
-                     style="width: @((this.TotalDistance / (decimal)16000 * (decimal)100).ToString("####0.###", CultureInfo.InvariantCulture))%;">
+                     style="width: @((this.TotalDistance / this.MileStones.Last().Distance * 100).ToString("####0.###", CultureInfo.InvariantCulture))%;">
                 </div>
             </div>
             <div class="progress-text">
-                <MudText Typo="Typo.h6">@(this.TotalDistance.ToString("####0.###")) von 16000km</MudText>
+                <MudText Typo="Typo.h6">@($"{this.TotalDistance.ToString("####0.###")} von {this.MileStones.Last().Distance.ToString("####0.###")}km")</MudText>
             </div>
         </div>
     </div>
