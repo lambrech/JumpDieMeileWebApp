@@ -27,7 +27,7 @@
 <MudThemeProvider Theme="this.MyCustomTheme" />
 <div class="vertical-wrap-panel" >
     <div class="horizontal-wrap-panel-center">
-        <MudTooltip Text="@($"{(RegisterRunsLiveDate > DateTime.Now ? $"Ab dem {(RegisterRunsLiveDate.ToString("dd.MM.yyyy"))} kannst du Aktivitäten eintragen" : "")}")">
+        @*<MudTooltip Text="@($"{(RegisterRunsLiveDate > DateTime.Now ? $"Ab dem {(RegisterRunsLiveDate.ToString("dd.MM.yyyy"))} kannst du Aktivitäten eintragen" : "")}")">
         <MudPaper Class="ma-4">
             <MudButton OnClick="@(() => { this.NavigationManager.NavigateTo(this.NavigationManager.CreateRoute(PageRoutes.RegisterRunRoute)); })"
                        Color="Color.Secondary" Variant="Variant.Filled" Disabled="@(RegisterRunsLiveDate > DateTime.Now)">Aktivität eintragen</MudButton>
@@ -36,7 +36,7 @@
         <MudPaper Class="ma-4">
             <MudButton OnClick="@(() => { this.NavigationManager.NavigateTo(this.NavigationManager.CreateRoute(PageRoutes.RegisterRunnerRoute)); })"
                        Color="Color.Secondary" Variant="Variant.Filled">Sportler registrieren</MudButton>
-        </MudPaper>
+        </MudPaper>*@
         <MudPaper Class="ma-4">
             <MudButton OnClick="@(() => { this.NavigationManager.NavigateTo(this.NavigationManager.CreateRoute(PageRoutes.RegisterSponsorRoute)); })"
                        Color="Color.Secondary" Variant="Variant.Filled">Sponsoring hinzufügen</MudButton>
