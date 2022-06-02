@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Jump die Meile 2022</title>
+    <base href="/JumpDieMeileWebApp/" />
+    <link href="css/app.css" rel="stylesheet" />
+    <link href="JumpDieMeileWebApp.styles.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
+    <link href="manifest.json" rel="manifest" />
+    <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png" />
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+</head>
+
+<body id="jdm_wa_body_2022" style="font-family: Roboto Condensed,sans-serif;">
+    <div id="app">Loading...</div>
+
+<div id="blazor-error-ui">
+    An unhandled error has occurred.
+    <a href="" class="reload">Reload</a>
+    <a class="dismiss">🗙</a>
+</div>
+
+<script>
+    // code to send message each time body resizes -> we can use these message to resize an iframe
+    let height;
+
+    const sendPostMessage = () => {
+        if (height !== document.getElementById('jdm_wa_body_2022').offsetHeight) {
+            height = document.getElementById('jdm_wa_body_2022').offsetHeight;
+            window.parent.postMessage({
+                frameHeight: height
+            }, '*');
+        }
+    }
+
+    elem = document.getElementById("jdm_wa_body_2022");
+
+    let resizeObserver = new ResizeObserver(() => {
+        sendPostMessage();
+    });
+
+    resizeObserver.observe(elem);
+</script>
+
+<script src="helper/brotli-decode.js"></script>
+    <script src="redirect.js"></script>
+    <script src="_framework/blazor.webassembly.js" autostart="false"></script>
+    <script>
+        Blazor.start({
+            loadBootResource: function (type, name, defaultUri, integrity) {
+                if (type !== 'dotnetjs' && location.hostname !== 'localhost') {
+                    return (async function () {
+                        const response = await fetch(defaultUri + '.br', { cache: 'no-cache' });
+                        if (!response.ok) {
+                            throw new Error(response.statusText);
+                        }
+                        const originalResponseBuffer = await response.arrayBuffer();
+                        const originalResponseArray = new Int8Array(originalResponseBuffer);
+                        const decompressedResponseArray = BrotliDecode(originalResponseArray);
+                        const contentType = type ===
+                            'dotnetwasm' ? 'application/wasm' : 'application/octet-stream';
+                        return new Response(decompressedResponseArray,
+                            { headers: { 'content-type': contentType } });
+                    })();
+                }
+            }
+        });
+    </script>
+    <script src="_content/MudBlazor/MudBlazor.min.js"></script>
+    <!--<script>navigator.serviceWorker.register('service-worker.js');</script>-->
+</body>
+
+</html>
